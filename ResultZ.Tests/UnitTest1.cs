@@ -1,4 +1,4 @@
-using System.Reflection.Metadata.Ecma335;
+﻿using System.Linq;
 
 using ResultZ.Reasons;
 using ResultZ.Results;
@@ -49,6 +49,32 @@ namespace ResultZ.Tests
 
             result2.ShouldBeOfType<Failure<string>>();
             result2.Reasons.ShouldContain(new Error("error"));
+        }
+
+        [Fact]
+        public void Test5()
+        {
+            var innerResult = Result.Failure(new Error("message"))
+                                    .WithError("message2");
+
+            //// Result.Failure("root", innerResult);
+            //// Result.Failure(new Error("root"), innerResult);
+            //// Result.Failure<Error>(innerResult);
+            //// Result.Failure().WithCause("root", innerResult);
+            //// Result.Failure().WithCause(new Error("root"), innerResult);
+            //// Result.Failure().WithCause<Error>(innerResult);
+
+            var t = Result.Failure(new Error("root", innerResult.Reasons));
+
+            t.ShouldBeOfType<Failure>();
+            t.Reasons.Count.ShouldBe(1);
+            var rootError = t.Reasons[0];
+            rootError.Message.ShouldBe("root");
+            rootError.Causes.Count.ShouldBe(2);
+            rootError.Causes[0].Message.ShouldBe("message");
+            rootError.Causes[0].Causes.ShouldBeEmpty();
+            rootError.Causes[1].Message.ShouldBe("message2");
+            rootError.Causes[1].Causes.ShouldBeEmpty();
         }
     }
 }

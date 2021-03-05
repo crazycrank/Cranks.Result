@@ -8,40 +8,8 @@ using ResultZ.Reasons;
 
 namespace ResultZ.Results
 {
-    public static class ResultExtensions
+    public static partial class ResultExtensions
     {
-        public static IResult WithSuccess(this IResult result, params string[] messages) => result.WithSuccess(messages.AsEnumerable());
-        public static IResult WithSuccess(this IResult result, IEnumerable<string> messages) => result.WithSuccess(messages.Select(m => new Success(m)));
-        public static IResult WithSuccess(this IResult result, params Success[] successes) => result.WithSuccess(successes.AsEnumerable());
-        public static IResult WithSuccess(this IResult result, IEnumerable<Success> successes) => result.WithReason(successes);
-        public static IResult WithSuccess<TSuccess>(this IResult result)
-            where TSuccess : Success, new()
-            => result.WithSuccess(new TSuccess());
-
-        public static IResult<TValue> WithSuccess<TValue>(this IResult<TValue> result, params string[] messages) => result.WithSuccess(messages.AsEnumerable());
-        public static IResult<TValue> WithSuccess<TValue>(this IResult<TValue> result, IEnumerable<string> messages) => result.WithSuccess(messages.Select(m => new Success(m)));
-        public static IResult<TValue> WithSuccess<TValue>(this IResult<TValue> result, params Success[] successes) => result.WithSuccess(successes.AsEnumerable());
-        public static IResult<TValue> WithSuccess<TValue>(this IResult<TValue> result, IEnumerable<Success> successes) => result.WithReason(successes);
-        public static IResult<TValue> WithSuccess<TSuccess, TValue>(this IResult<TValue> result)
-            where TSuccess : Success, new()
-            => result.WithSuccess(new TSuccess());
-
-        public static IResult WithError(this IResult result, params string[] messages) => result.WithError(messages.AsEnumerable());
-        public static IResult WithError(this IResult result, IEnumerable<string> messages) => result.WithError(messages.Select(m => new Error(m)));
-        public static IResult WithError(this IResult result, params Error[] successes) => result.WithError(successes.AsEnumerable());
-        public static IResult WithError(this IResult result, IEnumerable<Error> successes) => result.WithReason(successes);
-        public static IResult WithError<TError>(this IResult result)
-            where TError : Error, new()
-            => result.WithError(new TError());
-
-        public static IResult<TValue> WithError<TValue>(this IResult<TValue> result, params string[] messages) => result.WithError(messages.AsEnumerable());
-        public static IResult<TValue> WithError<TValue>(this IResult<TValue> result, IEnumerable<string> messages) => result.WithError(messages.Select(m => new Error(m)));
-        public static IResult<TValue> WithError<TValue>(this IResult<TValue> result, params Error[] successes) => result.WithError(successes.AsEnumerable());
-        public static IResult<TValue> WithError<TValue>(this IResult<TValue> result, IEnumerable<Error> successes) => result.WithReason(successes);
-        public static IResult<TValue> WithError<TError, TValue>(this IResult<TValue> result)
-            where TError : Error, new()
-            => result.WithError(new TError());
-
         internal static IResult WithReason(this IResult result, params Reason[] reasons) => result.WithReason(reasons.AsEnumerable());
         internal static IResult WithReason(this IResult result, IEnumerable<Reason> reasons) => reasons.Aggregate(result, (r, reason) => r.WithSingleReason(reason));
         internal static IResult<TValue> WithReason<TValue>(this IResult<TValue> result, params Reason[] reasons) => result.WithReason(reasons.AsEnumerable());
@@ -77,7 +45,7 @@ namespace ResultZ.Results
             // dogfooding
             return GetGenericSingleReasonMethod(result.GetType()) switch
                    {
-                       Failure<MethodInfo> failure => Result.From<IResult, MethodInfo>(failure),
+                       Failure<MethodInfo> => Result.Failure<IResult>(),
                        Successful<MethodInfo> { Value: var singleReasonMethod }
                            => Result.Successful((IResult)singleReasonMethod.Invoke(null, new object[] { result, reason })!),
                    };

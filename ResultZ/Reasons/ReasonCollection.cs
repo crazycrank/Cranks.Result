@@ -20,11 +20,11 @@ namespace ResultZ.Reasons
             Reasons = reasons.ToImmutableList();
         }
 
-        public ImmutableList<Reason> Reasons { get; } = ImmutableList<Reason>.Empty;
-
         public int Count => Reasons.Count;
 
         public Reason this[int index] => Reasons[index];
+
+        private ImmutableList<Reason> Reasons { get; } = ImmutableList<Reason>.Empty;
 
         public IEnumerator<Reason> GetEnumerator() => Reasons.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => Reasons.GetEnumerator();

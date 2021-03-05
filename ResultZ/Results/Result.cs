@@ -142,6 +142,7 @@ namespace ResultZ.Results
         public static IResult Failure() => new Failure();
         public static IResult Failure(params Reason[] reasons) => new Failure(reasons);
         public static IResult Failure(IEnumerable<Reason> reasons) => new Failure(reasons);
+        public static IResult Failure(IResult cause, IEnumerable<Reason> reasons) => new Failure(reasons);
 
         public static IResult<TValue> Failure<TValue>() => new Failure<TValue>();
         public static IResult<TValue> Failure<TValue>(params Reason[] reasons) => new Failure<TValue>(reasons);
