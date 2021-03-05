@@ -8,3 +8,4 @@ A simple, strongly typed and boilerplate poor implementation of the Result patte
 - [ ] Unit Tests
 - [ ] ASP.NET Core wrapper. Provide base error types and mapping rules for IActionResult so that results can be simply returned
 - [ ] Analyzer which throws an error when trying to derive from IResult outside of the library
+- [ ] Usage documentation & examples
