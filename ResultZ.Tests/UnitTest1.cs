@@ -1,6 +1,4 @@
-﻿using System.Linq;
-
-using ResultZ.Reasons;
+﻿using ResultZ.Reasons;
 using ResultZ.Results;
 
 using Shouldly;
@@ -14,18 +12,18 @@ namespace ResultZ.Tests
         [Fact]
         public void Test1()
         {
-            var result = Result.Successful();
+            var result = Result.Pass();
 
-            result.ShouldBeOfType<Successful>();
+            result.ShouldBeOfType<Passed>();
             result.Reasons.ShouldBeEmpty();
         }
 
         [Fact]
         public void Test2()
         {
-            var result = Result.Successful("value");
+            var result = Result.Pass("value");
 
-            result.ShouldBeOfType<Successful<string>>();
+            result.ShouldBeOfType<Passed<string>>();
             result.Reasons.ShouldBeEmpty();
             result.Value.ShouldBe("value");
         }
@@ -33,10 +31,10 @@ namespace ResultZ.Tests
         [Fact]
         public void Test3()
         {
-            var result = Result.Successful("value")
+            var result = Result.Pass("value")
                                .WithError("error");
 
-            result.ShouldBeOfType<Failure<string>>();
+            result.ShouldBeOfType<Failed<string>>();
             result.Reasons.ShouldContain(new Error("error"));
             result.Value.ShouldBeNull();
         }
@@ -44,37 +42,37 @@ namespace ResultZ.Tests
         [Fact]
         public void Test4()
         {
-            IResult result = Result.Successful("value");
+            IResult result = Result.Pass("value");
             var result2 = result.WithError("error");
 
-            result2.ShouldBeOfType<Failure<string>>();
+            result2.ShouldBeOfType<Failed<string>>();
             result2.Reasons.ShouldContain(new Error("error"));
         }
 
         [Fact]
         public void Test5()
         {
-            var innerResult = Result.Failure(new Error("message"))
+            var innerResult = Result.Fail(new Error("message"))
                                     .WithError("message2");
 
-            //// Result.Failure("root", innerResult);
-            //// Result.Failure(new Error("root"), innerResult);
-            //// Result.Failure<Error>(innerResult);
-            //// Result.Failure().WithCause("root", innerResult);
-            //// Result.Failure().WithCause(new Error("root"), innerResult);
-            //// Result.Failure().WithCause<Error>(innerResult);
+            //// Result.Failed("root", innerResult);
+            //// Result.Failed(new Error("root"), innerResult);
+            //// Result.Failed<Error>(innerResult);
+            //// Result.Failed().WithCause("root", innerResult);
+            //// Result.Failed().WithCause(new Error("root"), innerResult);
+            //// Result.Failed().WithCause<Error>(innerResult);
 
-            var t = Result.Failure(new Error("root", innerResult.Reasons));
+            var t = Result.Fail(innerResult);
 
-            t.ShouldBeOfType<Failure>();
+            t.ShouldBeOfType<Failed>();
             t.Reasons.Count.ShouldBe(1);
             var rootError = t.Reasons[0];
-            rootError.Message.ShouldBe("root");
-            rootError.Causes.Count.ShouldBe(2);
-            rootError.Causes[0].Message.ShouldBe("message");
-            rootError.Causes[0].Causes.ShouldBeEmpty();
-            rootError.Causes[1].Message.ShouldBe("message2");
-            rootError.Causes[1].Causes.ShouldBeEmpty();
+            ////rootError.Message.ShouldBe("root");
+            rootError.Reasons.Count.ShouldBe(2);
+            rootError.Reasons[0].Message.ShouldBe("message");
+            rootError.Reasons[0].Reasons.ShouldBeEmpty();
+            rootError.Reasons[1].Message.ShouldBe("message2");
+            rootError.Reasons[1].Reasons.ShouldBeEmpty();
         }
     }
 }

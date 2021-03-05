@@ -10,44 +10,47 @@ namespace ResultZ.Results
 {
     public static partial class ResultExtensions
     {
-        internal static IResult WithReason(this IResult result, params Reason[] reasons) => result.WithReason(reasons.AsEnumerable());
-        internal static IResult WithReason(this IResult result, IEnumerable<Reason> reasons) => reasons.Aggregate(result, (r, reason) => r.WithSingleReason(reason));
-        internal static IResult<TValue> WithReason<TValue>(this IResult<TValue> result, params Reason[] reasons) => result.WithReason(reasons.AsEnumerable());
-        internal static IResult<TValue> WithReason<TValue>(this IResult<TValue> result, IEnumerable<Reason> reasons) => reasons.Aggregate(result, (r, reason) => r.WithSingleReason(reason));
+        internal static IResult WithReason(this IResult result, params IReason[] reasons) => result.WithReason(reasons.AsEnumerable());
+        internal static IResult WithReason(this IResult result, IEnumerable<IReason> reasons) => reasons.Aggregate(result, (r, reason) => r.WithSingleReason(reason));
+        internal static IResult<TValue> WithReason<TValue>(this IResult<TValue> result, params IReason[] reasons) => result.WithReason(reasons.AsEnumerable());
+        internal static IResult<TValue> WithReason<TValue>(this IResult<TValue> result, IEnumerable<IReason> reasons) => reasons.Aggregate(result, (r, reason) => r.WithSingleReason(reason));
 
-        private static IResult<TValue> WithSingleReason<TValue>(this IResult<TValue> result, Reason reason)
+        private static IResult<TValue> WithSingleReason<TValue>(this IResult<TValue> result, IReason reason)
         {
             return (result, reason) switch
                    {
-                       { result: Failure<TValue> } or { reason: Error } => new Failure<TValue>(result, reason),
-                       { result: Successful<TValue> sucessful } => new Successful<TValue>(sucessful, reason),
-                       _ => throw new InvalidOperationException("Unexpected combination"),
+                       { result: Failed<TValue> } or { reason: Error } => new Failed<TValue>(result.Reasons.Append(reason)),
+                       { result: Passed<TValue> sucessful } => new Passed<TValue>(sucessful.Value, sucessful.Reasons.Append(reason)),
+                       _ => throw new InvalidOperationException("Deriving from IResult is not supported"),
                    };
         }
 
-        private static IResult WithSingleReason(this IResult result, Reason reason)
+        private static IResult WithSingleReason(this IResult result, IReason reason)
         {
             // dogfooding
             // TODO: is it possible that the compiler realizes this is exhaustive?
             return HandleGenericVariant(result, reason) switch
                    {
-                       Successful<IResult> { Value: var genericResult } => genericResult,
-                       Failure => (result, reason) switch
+                       Passed<IResult> { Value: var genericResult } => genericResult,
+                       Failed => (result, reason) switch
                                   {
-                                      { result: Failure } or { reason: Error } => new Failure(result, reason),
-                                      { result: Successful sucessful } => new Successful(sucessful, reason),
+                                      { result: Failed } or { reason: Error } => new Failed(result.Reasons.Append(reason)),
+                                      { result: Passed sucessful } => new Passed(sucessful.Reasons.Append(reason)),
+                                      _ => throw new InvalidOperationException("Deriving from IResult is not supported"),
                                   },
+                       _ => throw new InvalidOperationException("Deriving from IResult is not supported"),
                    };
         }
 
-        private static IResult<IResult> HandleGenericVariant(this IResult result, Reason reason)
+        private static IResult<IResult> HandleGenericVariant(this IResult result, IReason reason)
         {
             // dogfooding
             return GetGenericSingleReasonMethod(result.GetType()) switch
                    {
-                       Failure<MethodInfo> => Result.Failure<IResult>(),
-                       Successful<MethodInfo> { Value: var singleReasonMethod }
-                           => Result.Successful((IResult)singleReasonMethod.Invoke(null, new object[] { result, reason })!),
+                       Failed => Result.Fail<IResult>(),
+                       Passed<MethodInfo> { Value: var singleReasonMethod }
+                           => Result.Pass((IResult)singleReasonMethod.Invoke(null, new object[] { result, reason })!),
+                       _ => throw new InvalidOperationException("Deriving from IResult is not supported"),
                    };
         }
 
@@ -59,26 +62,29 @@ namespace ResultZ.Results
         {
             if (!resultType.IsGenericType)
             {
-                return Result.Failure<MethodInfo>();
+                return Result.Fail<MethodInfo>();
             }
 
             var resultValueType = resultType.GetGenericArguments().Single();
             var genericResultType = typeof(IResult<>).MakeGenericType(resultValueType);
             if (!resultType.IsAssignableTo(genericResultType))
             {
-                return Result.Failure<MethodInfo>();
+                return Result.Fail<MethodInfo>();
             }
 
             var singleReasonMethod = WithSingleReasonCache.GetOrAdd(resultType, CreateGenericSingleReasonsMethod());
 
-            return Result.Successful(singleReasonMethod);
+            return Result.Pass(singleReasonMethod);
 
             MethodInfo CreateGenericSingleReasonsMethod()
             {
-                return typeof(ResultExtensions)
-                       .GetMethods(BindingFlags.Static | BindingFlags.NonPublic)
-                       .Single(m => m.Name == nameof(WithSingleReason) && m.IsGenericMethod)
-                       .MakeGenericMethod(resultValueType);
+                // TODO maybe create a func from the method info
+                ////Expression.Lambda<Func<IResult<TValue>, Reason, IResult>()
+                var genericSingleReasonsMethod = typeof(ResultExtensions)
+                                                 .GetMethods(BindingFlags.Static | BindingFlags.NonPublic)
+                                                 .Single(m => m.Name == nameof(WithSingleReason) && m.IsGenericMethod)
+                                                 .MakeGenericMethod(resultValueType);
+                return genericSingleReasonsMethod;
             }
         }
     }
