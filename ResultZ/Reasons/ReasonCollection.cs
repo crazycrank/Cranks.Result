@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 
-namespace ResultZ.Reasons
+namespace ResultZ
 {
     public sealed record ReasonCollection
         : IReadOnlyList<IReason>

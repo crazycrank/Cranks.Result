@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ResultZ.Reasons
+namespace ResultZ
 {
     public interface IReason
     {

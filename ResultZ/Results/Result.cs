@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using ResultZ.Reasons;
-
-namespace ResultZ.Results
+namespace ResultZ
 {
     public static class Result
     {

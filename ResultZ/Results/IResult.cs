@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using ResultZ.Reasons;
-
-namespace ResultZ.Results
+namespace ResultZ
 {
     public interface IResult : IReason
     {
