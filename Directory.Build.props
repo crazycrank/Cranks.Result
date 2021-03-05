@@ -15,7 +15,6 @@
   <PropertyGroup>
     <Authors>Max Obrist</Authors>
     <Product>ResultZ</Product>
-    <Version>0.1.0</Version>
     <Description>A simple, strongly typed and boilerplate poor implementation of the Result pattern.</Description>
     <Copyright>2021 Max Obrist</Copyright>
     <PackageProjectUrl>https://github.com/crazycrank/ResultZ</PackageProjectUrl>
