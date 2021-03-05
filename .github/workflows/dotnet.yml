@@ -88,8 +88,6 @@ jobs:
     if: contains(needs.build.outputs.branchName, 'master') 
     steps:
     - name: Publish NuGet
-      # You may pin to the exact commit or the version.
-      # uses: brandedoutcast/publish-nuget@c12b8546b67672ee38ac87bea491ac94a587f7cc
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
         PROJECT_FILE_PATH: ResultZ/ResultZ.csproj
@@ -102,5 +100,5 @@ jobs:
         INCLUDE_SYMBOLS: true
         
     - name: Display Output
-    - run: |
+      run: |
         echo "SemVer: ${{ needs.build.outputs.semVer }}"
