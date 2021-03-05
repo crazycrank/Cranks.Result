@@ -1,7 +1,10 @@
 using System.Reflection.Metadata.Ecma335;
+
 using ResultZ.Reasons;
 using ResultZ.Results;
+
 using Shouldly;
+
 using Xunit;
 
 namespace ResultZ.Tests
@@ -31,7 +34,7 @@ namespace ResultZ.Tests
         public void Test3()
         {
             var result = Result.Successful("value")
-                .WithError("error");
+                               .WithError("error");
 
             result.ShouldBeOfType<Failure<string>>();
             result.Reasons.ShouldContain(new Error("error"));

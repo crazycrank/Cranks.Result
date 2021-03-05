@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using ResultZ.Reasons;
 
 namespace ResultZ.Results
@@ -8,29 +9,11 @@ namespace ResultZ.Results
     public interface IResult
     {
         public ReasonCollection Reasons { get; }
-
-        //IResult WithReason(Reason reason)
-        //{
-        //    return (result: this, reason) switch
-        //    {
-        //        { result: Failure } or { reason: Error } => new Failure(this, reason),
-        //        { result: Successful } => new Successful(this, reason),
-        //    };
-        //}
     }
 
     public interface IResult<out TValue> : IResult
     {
         public TValue? Value { get; }
-
-        //IResult WithReason<TValue>(Reason reason)
-        //{
-        //    return (result: this, reason) switch
-        //    {
-        //        { result: Failure } or { reason: Error } => new Failure(this, reason),
-        //        { result: Successful } => new Successful(this, reason),
-        //    };
-        //}
     }
 
     public record Failure
@@ -81,6 +64,7 @@ namespace ResultZ.Results
             : base(reasons)
         {
         }
+
         public TValue? Value => default;
     }
 
@@ -166,21 +150,22 @@ namespace ResultZ.Results
         public static IResult From(IResult result)
         {
             return result switch
-            {
-                Failure _ => new Failure(new Error(Causes: result.Reasons)),
-                Successful _ => new Successful(new Success(Causes: result.Reasons)),
-                _ => throw new ArgumentOutOfRangeException(nameof(result)),
-            };
+                   {
+                       Failure _ => new Failure(new Error(Causes: result.Reasons)),
+                       Successful _ => new Successful(new Success(Causes: result.Reasons)),
+                       _ => throw new ArgumentOutOfRangeException(nameof(result)),
+                   };
         }
+
         public static IResult<TTargetValue> From<TTargetValue, TSourceValue>(IResult<TSourceValue> result)
         {
             // TODO something doesn't feel quite right with the Result Constructors
             return result switch
-            {
-                Failure<TTargetValue> => new Failure<TTargetValue>(new Error(Causes: result.Reasons)),
-                Successful<TTargetValue> success => new Successful<TTargetValue>(success, new Success(Causes: result.Reasons)),
-                _ => throw new ArgumentOutOfRangeException(nameof(result)),
-            };
+                   {
+                       Failure<TTargetValue> => new Failure<TTargetValue>(new Error(Causes: result.Reasons)),
+                       Successful<TTargetValue> success => new Successful<TTargetValue>(success, new Success(Causes: result.Reasons)),
+                       _ => throw new ArgumentOutOfRangeException(nameof(result)),
+                   };
         }
     }
 }
