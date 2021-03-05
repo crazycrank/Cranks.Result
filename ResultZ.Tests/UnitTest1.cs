@@ -18,7 +18,7 @@ namespace ResultZ.Tests
         [Fact]
         public void Test2()
         {
-            var result = Result.Pass("value");
+            var result = Result.Pass<string>("value");
 
             result.ShouldBeOfType<Passed<string>>();
             result.Reasons.ShouldBeEmpty();
@@ -28,7 +28,7 @@ namespace ResultZ.Tests
         [Fact]
         public void Test3()
         {
-            var result = Result.Pass("value")
+            var result = Result.Pass<string>("value")
                                .WithError("error");
 
             result.ShouldBeOfType<Failed<string>>();
@@ -37,34 +37,21 @@ namespace ResultZ.Tests
         }
 
         [Fact]
-        public void Test4()
-        {
-            IResult result = Result.Pass("value");
-            var result2 = result.WithError("error");
-
-            result2.ShouldBeOfType<Failed<string>>();
-            result2.Reasons.ShouldContain(new Error("error"));
-        }
-
-        [Fact]
         public void Test5()
         {
-            var innerResult = Result.Fail(new Error("message"))
+            var innerResult = Result.Fail("inner")
+                                    .WithError("message")
                                     .WithError("message2");
 
-            //// Result.Failed("root", innerResult);
-            //// Result.Failed(new Error("root"), innerResult);
-            //// Result.Failed<Error>(innerResult);
-            //// Result.Failed().WithCause("root", innerResult);
-            //// Result.Failed().WithCause(new Error("root"), innerResult);
-            //// Result.Failed().WithCause<Error>(innerResult);
+            var result = Result.Fail("root", innerResult);
 
-            var t = Result.Fail(innerResult);
+            result.ShouldBeOfType<Failed>();
+            result.Message.ShouldBe("root");
+            result.Reasons.Count.ShouldBe(1);
 
-            t.ShouldBeOfType<Failed>();
-            t.Reasons.Count.ShouldBe(1);
-            var rootError = t.Reasons[0];
-            ////rootError.Message.ShouldBe("root");
+            var rootError = result.Reasons[0];
+            rootError.Message.ShouldBe("inner");
+
             rootError.Reasons.Count.ShouldBe(2);
             rootError.Reasons[0].Message.ShouldBe("message");
             rootError.Reasons[0].Reasons.ShouldBeEmpty();

@@ -21,7 +21,7 @@ namespace ResultZ
         }
 
         internal Failed(string message, IEnumerable<IReason> reasons)
-            : base(reasons)
+            : base(message, reasons)
         {
         }
 

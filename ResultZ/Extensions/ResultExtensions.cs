@@ -17,8 +17,8 @@ namespace ResultZ
         {
             return (result, reason) switch
                    {
-                       { result: Failed<TValue> } or { reason: Error } => new Failed<TValue>(result.Reasons.Append(reason)),
-                       { result: Passed<TValue> sucessful } => new Passed<TValue>(sucessful.Value, sucessful.Reasons.Append(reason)),
+                       { result: Failed<TValue> } or { reason: Error } => new Failed<TValue>(result.Message, result.Reasons.Append(reason)),
+                       { result: Passed<TValue> sucessful } => new Passed<TValue>(sucessful.Value, result.Message, sucessful.Reasons.Append(reason)),
                        _ => throw new InvalidOperationException("Deriving from IResult is not supported"),
                    };
         }
@@ -32,8 +32,8 @@ namespace ResultZ
                        Passed<IResult> { Value: var genericResult } => genericResult,
                        Failed => (result, reason) switch
                                   {
-                                      { result: Failed } or { reason: Error } => new Failed(result.Reasons.Append(reason)),
-                                      { result: Passed sucessful } => new Passed(sucessful.Reasons.Append(reason)),
+                                      { result: Failed } or { reason: Error } => new Failed(result.Message, result.Reasons.Append(reason)),
+                                      { result: Passed sucessful } => new Passed(result.Message, sucessful.Reasons.Append(reason)),
                                       _ => throw new InvalidOperationException("Deriving from IResult is not supported"),
                                   },
                        _ => throw new InvalidOperationException("Deriving from IResult is not supported"),
