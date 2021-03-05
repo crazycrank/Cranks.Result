@@ -10,11 +10,17 @@ namespace ResultZ.Reasons
     }
 
     public record Error(string Message = "", ReasonCollection? Causes = null)
-        : Reason(Message, Causes);
+        : Reason(Message, Causes)
+    {
+        public static implicit operator Error(string message) => new(message);
+    }
 
     public record UnexpectedError(Exception Exception, ReasonCollection? Causes = null)
         : Error(Exception.Message, Causes);
 
     public record Success(string Message = "", ReasonCollection? Causes = null)
-        : Reason(Message, Causes);
+        : Reason(Message, Causes)
+    {
+        public static implicit operator Success(string message) => new(message);
+    }
 }
