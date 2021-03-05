@@ -1,4 +1,4 @@
-name: .NET
+﻿name: .NET
 
 on:
   push:
@@ -76,34 +76,11 @@ jobs:
       run: dotnet restore
       
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore -p:VersionPrefix=${{ steps.gitversion.outputs.assemblySemVer }} -p:VersionSuffix=${{ steps.gitversion.outputs.preReleaseTag }}
       
     - name: Test
       run: dotnet test --no-build --verbosity normal
 
-  test:
-    name: Test
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-    - name: Display Output
-      run: |
-        echo "SemVer: ${{ needs.build.outputs.semVer }}"
-
-  publish:
-    name: Publish to NuGet
-    runs-on: ubuntu-latest
-    needs: build
-    if: contains(needs.build.outputs.branchName, 'master') 
-    steps:
-    - name: Publish NuGet
-      uses: brandedoutcast/publish-nuget@v2.5.5
-      with:
-        PROJECT_FILE_PATH: ResultZ/ResultZ.csproj
-        PACKAGE_NAME: ResultZ
-        # Filepath with version info, relative to root of repository & defaults to PROJECT_FILE_PATH
-        VERSION_STATIC: 1.0.0
-        TAG_COMMIT: true
-        TAG_FORMAT: v*
-        NUGET_KEY: ${{ secrets.NuGetAPIKey }}
-        INCLUDE_SYMBOLS: true
+    - name: Pack
+      if: contains(steps.gitversion.outputs.branchName, 'master')
+      run: dotnet pack /ResultZ/ResultZ.csproj --no-build --output nupkgs --verbosity normal
