@@ -83,4 +83,4 @@ jobs:
 
     - name: Pack
       #if: contains(steps.gitversion.outputs.branchName, 'master')
-      run: dotnet pack /ResultZ/ResultZ.csproj --no-build --output nupkgs --verbosity normal
+      run: dotnet pack --project ResultZ/ResultZ.csproj --no-build --output nupkgs --verbosity normal
