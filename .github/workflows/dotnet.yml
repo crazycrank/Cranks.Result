@@ -80,7 +80,7 @@ jobs:
       
     - name: Test
       run: dotnet test --no-build --verbosity normal
-      
+
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -89,7 +89,7 @@ jobs:
     - name: Display Output
       run: |
         echo "SemVer: ${{ needs.build.outputs.semVer }}"
-        
+
   publish:
     name: Publish to NuGet
     runs-on: ubuntu-latest
