@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ResultZ.AspNetCore
+﻿namespace ResultZ.AspNetCore
 {
     public class Class1
     {

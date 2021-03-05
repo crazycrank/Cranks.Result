@@ -1,9 +1,4 @@
-using System.Reflection.Metadata.Ecma335;
-
-using ResultZ.Reasons;
-using ResultZ.Results;
-
-using Shouldly;
+﻿using Shouldly;
 
 using Xunit;
 
@@ -14,18 +9,18 @@ namespace ResultZ.Tests
         [Fact]
         public void Test1()
         {
-            var result = Result.Successful();
+            var result = Result.Pass();
 
-            result.ShouldBeOfType<Successful>();
+            result.ShouldBeOfType<Passed>();
             result.Reasons.ShouldBeEmpty();
         }
 
         [Fact]
         public void Test2()
         {
-            var result = Result.Successful("value");
+            var result = Result.Pass<string>("value");
 
-            result.ShouldBeOfType<Successful<string>>();
+            result.ShouldBeOfType<Passed<string>>();
             result.Reasons.ShouldBeEmpty();
             result.Value.ShouldBe("value");
         }
@@ -33,22 +28,35 @@ namespace ResultZ.Tests
         [Fact]
         public void Test3()
         {
-            var result = Result.Successful("value")
+            var result = Result.Pass<string>("value")
                                .WithError("error");
 
-            result.ShouldBeOfType<Failure<string>>();
+            result.ShouldBeOfType<Failed<string>>();
             result.Reasons.ShouldContain(new Error("error"));
             result.Value.ShouldBeNull();
         }
 
         [Fact]
-        public void Test4()
+        public void Test5()
         {
-            IResult result = Result.Successful("value");
-            var result2 = result.WithError("error");
+            var innerResult = Result.Fail("inner")
+                                    .WithError("message")
+                                    .WithError("message2");
 
-            result2.ShouldBeOfType<Failure<string>>();
-            result2.Reasons.ShouldContain(new Error("error"));
+            var result = Result.Fail("root", innerResult);
+
+            result.ShouldBeOfType<Failed>();
+            result.Message.ShouldBe("root");
+            result.Reasons.Count.ShouldBe(1);
+
+            var rootError = result.Reasons[0];
+            rootError.Message.ShouldBe("inner");
+
+            rootError.Reasons.Count.ShouldBe(2);
+            rootError.Reasons[0].Message.ShouldBe("message");
+            rootError.Reasons[0].Reasons.ShouldBeEmpty();
+            rootError.Reasons[1].Message.ShouldBe("message2");
+            rootError.Reasons[1].Reasons.ShouldBeEmpty();
         }
     }
 }

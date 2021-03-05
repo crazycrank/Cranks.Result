@@ -12,4 +12,15 @@
     </PackageReference>
   </ItemGroup>
 
+  <PropertyGroup>
+    <Authors>Max Obrist</Authors>
+    <Product>ResultZ</Product>
+    <Description>A simple, strongly typed and boilerplate poor implementation of the Result pattern.</Description>
+    <Copyright>2021 Max Obrist</Copyright>
+    <PackageProjectUrl>https://github.com/crazycrank/ResultZ</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/crazycrank/ResultZ</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
+
 </Project>

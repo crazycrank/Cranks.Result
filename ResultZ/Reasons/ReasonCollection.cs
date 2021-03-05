@@ -5,28 +5,29 @@ using System.Collections.Immutable;
 using System.Linq;
 using System.Text;
 
-namespace ResultZ.Reasons
+namespace ResultZ
 {
     public sealed record ReasonCollection
-        : IReadOnlyList<Reason>
+        : IReadOnlyList<IReason>
     {
-        public ReasonCollection(params Reason[] reasons)
+        public ReasonCollection(params IReason[] reasons)
             : this(reasons.AsEnumerable())
         {
         }
 
-        public ReasonCollection(IEnumerable<Reason> reasons)
+        public ReasonCollection(IEnumerable<IReason> reasons)
         {
             Reasons = reasons.ToImmutableList();
         }
 
-        public ImmutableList<Reason> Reasons { get; } = ImmutableList<Reason>.Empty;
-
         public int Count => Reasons.Count;
 
-        public Reason this[int index] => Reasons[index];
+        private ImmutableList<IReason> Reasons { get; } = ImmutableList<IReason>.Empty;
 
-        public IEnumerator<Reason> GetEnumerator() => Reasons.GetEnumerator();
+        public IReason this[int index] => Reasons[index];
+
+        public IEnumerator<IReason> GetEnumerator() => Reasons.GetEnumerator();
+
         IEnumerator IEnumerable.GetEnumerator() => Reasons.GetEnumerator();
 
         public override int GetHashCode()
