@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -93,6 +94,7 @@ namespace ResultZ.Results
 
         private static IResult<IResult> HandleGenericVariant(this IResult result, Reason reason)
         {
+            // dogfooding
             return GetGenericSingleReasonMethod(result.GetType()) switch
             {
                 Failure<MethodInfo> failure => Result.From<IResult, MethodInfo>(failure),
@@ -101,7 +103,7 @@ namespace ResultZ.Results
             };
         }
 
-        private static readonly Dictionary<Type, MethodInfo> WithSingleReasonCache = new();
+        private static readonly ConcurrentDictionary<Type, MethodInfo> WithSingleReasonCache = new();
 
         private static IResult<MethodInfo> GetGenericSingleReasonMethod(Type resultType)
         {
@@ -117,13 +119,9 @@ namespace ResultZ.Results
                 return Result.Failure<MethodInfo>();
             }
 
-            // TODO Thread safety?
-            if (!WithSingleReasonCache.ContainsKey(resultType))
-            {
-                WithSingleReasonCache.Add(resultType, CreateGenericSingleReasonsMethod());
-            }
+            var singleReasonMethod = WithSingleReasonCache.GetOrAdd(resultType, CreateGenericSingleReasonsMethod());
 
-            return Result.Successful(WithSingleReasonCache[resultType]);
+            return Result.Successful(singleReasonMethod);
 
             MethodInfo CreateGenericSingleReasonsMethod()
             {
