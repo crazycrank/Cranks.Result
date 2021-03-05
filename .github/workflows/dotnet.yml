@@ -80,6 +80,7 @@ jobs:
       
     - name: Test
       run: dotnet test --no-build --verbosity normal
+      
   test:
     name: Test
     runs-on: ubuntu-latest
