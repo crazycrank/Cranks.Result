@@ -41,14 +41,14 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --no-restore -p:VersionPrefix=${{ steps.gitversion.outputs.assemblySemVer }} -p:VersionSuffix=${{ steps.gitversion.outputs.preReleaseTag }} -c Release
+      run: dotnet build --no-restore -p:VersionPrefix=${{ steps.gitversion.outputs.assemblySemVer }} -p:VersionSuffix=${{ steps.gitversion.outputs.preReleaseTag }} --configuration Release
 
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --configuration Release --verbosity normal
 
     - name: Pack
       if: contains(steps.gitversion.outputs.branchName, 'master')
-      run: dotnet pack ResultZ/ResultZ.csproj --no-build --output nupkgs -p:VersionPrefix=${{ steps.gitversion.outputs.majorMinorPatch }} -p:VersionSuffix=${{ steps.gitversion.outputs.nuGetPreReleaseTagV2 }}
+      run: dotnet pack ResultZ/ResultZ.csproj --no-build --configuration Release --output nupkgs -p:VersionPrefix=${{ steps.gitversion.outputs.majorMinorPatch }} -p:VersionSuffix=${{ steps.gitversion.outputs.nuGetPreReleaseTagV2 }}
 
     - name: Nuget Publish
       if: contains(steps.gitversion.outputs.branchName, 'master')
