@@ -89,6 +89,7 @@ jobs:
     - name: Display Output
       run: |
         echo "SemVer: ${{ needs.build.outputs.semVer }}"
+        
   publish:
     name: Publish to NuGet
     runs-on: ubuntu-latest
