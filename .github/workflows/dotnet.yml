@@ -52,4 +52,4 @@ jobs:
 
     - name: Nuget Publish
       if: contains(steps.gitversion.outputs.branchName, 'master')
-      run: dotnet nuget push ResultZ/nupkgs/ResultZ.${{ steps.gitversion.outputs.nuGetVersionV2 }}.nupkg --api-key ${{ secrets.NuGetAPIKey }} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push nupkgs/ResultZ.${{ steps.gitversion.outputs.nuGetVersionV2 }}.nupkg --api-key ${{ secrets.NuGetAPIKey }} --source https://api.nuget.org/v3/index.json
