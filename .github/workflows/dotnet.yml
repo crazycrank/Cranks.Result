@@ -76,7 +76,7 @@ jobs:
       run: dotnet restore
       
     - name: Build
-      run: dotnet build --no-restore -p:VersionPrefix=${{ steps.gitversion.outputs.assemblySemVer }} -p:VersionSuffix=${{ steps.gitversion.outputs.preReleaseTag }}
+      run: dotnet build --no-restore -p:VersionPrefix=${{ steps.gitversion.outputs.assemblySemVer }} -p:VersionSuffix=${{ steps.gitversion.outputs.preReleaseTag }} -c Release
       
     - name: Test
       run: dotnet test --no-build --verbosity normal
