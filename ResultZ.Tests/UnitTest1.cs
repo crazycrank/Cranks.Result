@@ -18,7 +18,7 @@ namespace ResultZ.Tests
         [Fact]
         public void Test2()
         {
-            var result = Result.Pass<string>("value");
+            var result = Result.Pass("value");
 
             result.ShouldBeOfType<Passed<string>>();
             result.Reasons.ShouldBeEmpty();
@@ -28,7 +28,7 @@ namespace ResultZ.Tests
         [Fact]
         public void Test3()
         {
-            var result = Result.Pass<string>("value")
+            var result = Result.Pass("value")
                                .WithError("error");
 
             result.ShouldBeOfType<Failed<string>>();
@@ -39,11 +39,14 @@ namespace ResultZ.Tests
         [Fact]
         public void Test5()
         {
-            var innerResult = Result.Fail("inner")
+            var innerResult = Result.Fail()
+                                    .WithMessage("inner")
                                     .WithError("message")
                                     .WithError("message2");
 
-            var result = Result.Fail("root", innerResult);
+            var result = Result.Fail()
+                               .WithMessage("root")
+                               .WithReason(innerResult);
 
             result.ShouldBeOfType<Failed>();
             result.Message.ShouldBe("root");
