@@ -46,7 +46,7 @@ jobs:
         
     - name: Determine Version
       id: gitversion
-      run: dotnet gitversion /output buildserver
+      run: dotnet gitversion /output buildserver --tool-path ~/runner/.gitversion.tool
 
     - name: Cache dependencies
       id: cache-nuget
