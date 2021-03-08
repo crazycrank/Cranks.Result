@@ -21,9 +21,10 @@ jobs:
       with:
         fetch-depth: 0
         
-    - name: Cache .NET
+    - name: Cache .NET & tools
       uses: actions/cache@v2
-      id: cache-dotnet
+      # TODO better cache key?
+      id: cache-dotnet-and-tools 
       with:
         path: ~/runner/.dotnet
         key: ${{ runner.os }}-dotnet
@@ -34,14 +35,8 @@ jobs:
       with:
         dotnet-version: 5.0.x
         
-  # - name: Cache GitVersion
-  #   uses: actions/cache@v2
-  #   id: cache-gitversion
-  #   with:
-  #     path: ~/runner/.gitversion.tool
-  #     key: ${{ runner.os }}-gitversion
-        
     - name: Install GitVersion
+      if: steps.cache-dotnet.outputs.cache-hit != 'true'
       run: dotnet tool install GitVersion.Tool --global
         
     - name: Determine Version
@@ -59,15 +54,15 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --no-restore -p:VersionPrefix=$GitVersion_AssemblySemVer -p:VersionSuffix=$GitVersion_PreReleaseTag --configuration Release
+      run: dotnet build --no-restore -p:VersionPrefix=${{ env.GitVersion_AssemblySemVer }} -p:VersionSuffix=${{ env.$GitVersion_PreReleaseTag }} --configuration Release
 
     - name: Test
       run: dotnet test --no-build --configuration Release --verbosity normal
 
     - name: Pack
       if: contains(steps.gitversion.outputs.branchName, 'master')
-      run: dotnet pack ResultZ/ResultZ.csproj --no-build --configuration Release --output nupkgs -p:VersionPrefix=$GitVersion_MajorMinorPatch -p:VersionSuffix=$GitVersion_NuGetPreReleaseTagV2 --include-symbols
+      run: dotnet pack ResultZ/ResultZ.csproj --no-build --configuration Release --output nupkgs -p:VersionPrefix=${{ env.$GitVersion_MajorMinorPatch }} -p:VersionSuffix=${{ env.$GitVersion_NuGetPreReleaseTagV2 }} --include-symbols
 
     - name: Nuget Publish
       if: contains(steps.gitversion.outputs.branchName, 'master')
-      run: dotnet nuget push nupkgs/ResultZ.$GitVersion_NuGetVersionV2.nupkg --api-key ${{ secrets.NuGetAPIKey }} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push nupkgs/ResultZ.${{ env.$GitVersion_NuGetVersionV2 }}.nupkg --api-key ${{ secrets.NuGetAPIKey }} --source https://api.nuget.org/v3/index.json
