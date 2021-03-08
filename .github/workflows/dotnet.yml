@@ -46,11 +46,9 @@ jobs:
         
     - name: Determine Version
       id: gitversion
-      uses: gittools/actions/gitversion/execute@v0.9.7
-      with:
-        useConfigFile: true
+      run: dotnet gitversion /output buildserver
 
-    - name: Cache Nuget Packages
+    - name: Cache dependencies
       id: cache-nuget
       uses: actions/cache@v2
       with:
@@ -61,15 +59,15 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --no-restore -p:VersionPrefix=${{ steps.gitversion.outputs.assemblySemVer }} -p:VersionSuffix=${{ steps.gitversion.outputs.preReleaseTag }} --configuration Release
+      run: dotnet build --no-restore -p:VersionPrefix=${{ steps.gitversion.env.GITVERSION_ASSEMBLYSEMVER }} -p:VersionSuffix=${{ steps.gitversion.env.GITVERSION_PRERELEASETAG }} --configuration Release
 
     - name: Test
       run: dotnet test --no-build --configuration Release --verbosity normal
 
     - name: Pack
       if: contains(steps.gitversion.outputs.branchName, 'master')
-      run: dotnet pack ResultZ/ResultZ.csproj --no-build --configuration Release --output nupkgs -p:VersionPrefix=${{ steps.gitversion.outputs.majorMinorPatch }} -p:VersionSuffix=${{ steps.gitversion.outputs.nuGetPreReleaseTagV2 }} --include-symbols
+      run: dotnet pack ResultZ/ResultZ.csproj --no-build --configuration Release --output nupkgs -p:VersionPrefix=${{ steps.gitversion.env.GITVERSION_MAJORMINORPATCH }} -p:VersionSuffix=${{ steps.gitversion.env.GITVERSION_NUGETPRERELEASETAGV2 }} --include-symbols
 
     - name: Nuget Publish
       if: contains(steps.gitversion.outputs.branchName, 'master')
-      run: dotnet nuget push nupkgs/ResultZ.${{ steps.gitversion.outputs.nuGetVersionV2 }}.nupkg --api-key ${{ secrets.NuGetAPIKey }} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push nupkgs/ResultZ.${{ steps.gitversion.env.GITVERSION_NUGETVERSIONV2 }}.nupkg --api-key ${{ secrets.NuGetAPIKey }} --source https://api.nuget.org/v3/index.json
