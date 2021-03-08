@@ -59,15 +59,15 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --no-restore -p:VersionPrefix=${{ steps.gitversion.env.GITVERSION_ASSEMBLYSEMVER }} -p:VersionSuffix=${{ steps.gitversion.env.GITVERSION_PRERELEASETAG }} --configuration Release
+      run: dotnet build --no-restore -p:VersionPrefix=${{ steps.gitversion.env.GitVersion_AssemblySemVer }} -p:VersionSuffix=${{ steps.gitversion.env.GitVersion_PreReleaseTag }} --configuration Release
 
     - name: Test
       run: dotnet test --no-build --configuration Release --verbosity normal
 
     - name: Pack
       if: contains(steps.gitversion.outputs.branchName, 'master')
-      run: dotnet pack ResultZ/ResultZ.csproj --no-build --configuration Release --output nupkgs -p:VersionPrefix=${{ steps.gitversion.env.GITVERSION_MAJORMINORPATCH }} -p:VersionSuffix=${{ steps.gitversion.env.GITVERSION_NUGETPRERELEASETAGV2 }} --include-symbols
+      run: dotnet pack ResultZ/ResultZ.csproj --no-build --configuration Release --output nupkgs -p:VersionPrefix=${{ steps.gitversion.env.GitVersion_MajorMinorPatch }} -p:VersionSuffix=${{ steps.gitversion.env.GitVersion_NuGetPreReleaseTagV2 }} --include-symbols
 
     - name: Nuget Publish
       if: contains(steps.gitversion.outputs.branchName, 'master')
-      run: dotnet nuget push nupkgs/ResultZ.${{ steps.gitversion.env.GITVERSION_NUGETVERSIONV2 }}.nupkg --api-key ${{ secrets.NuGetAPIKey }} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push nupkgs/ResultZ.${{ steps.gitversion.env.GitVersion_NuGetVersionV2 }}.nupkg --api-key ${{ secrets.NuGetAPIKey }} --source https://api.nuget.org/v3/index.json
