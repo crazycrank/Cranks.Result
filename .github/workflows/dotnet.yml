@@ -57,7 +57,7 @@ jobs:
         path: ~/.nuget/packages
         key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
         
-    - name: Restore dependenciesGitVersion
+    - name: Restore dependencies
       if: steps.cache-dependencies.outputs.cache-hit != 'true'
       run: dotnet restore
 
