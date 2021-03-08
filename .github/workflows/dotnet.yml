@@ -34,19 +34,19 @@ jobs:
       with:
         dotnet-version: 5.0.x
         
-    - name: Cache GitVersion
-      uses: actions/cache@v2
-      id: cache-gitversion
-      with:
-        path: ~/runner/.gitversion.tool
-        key: ${{ runner.os }}-gitversion
+  # - name: Cache GitVersion
+  #   uses: actions/cache@v2
+  #   id: cache-gitversion
+  #   with:
+  #     path: ~/runner/.gitversion.tool
+  #     key: ${{ runner.os }}-gitversion
         
     - name: Install GitVersion
-      run: dotnet tool install GitVersion.Tool --tool-path ~/runner/.gitversion.tool
+      run: dotnet tool install GitVersion.Tool --global
         
     - name: Determine Version
       id: gitversion
-      run: dotnet gitversion /output buildserver --tool-path ~/runner/.gitversion.tool
+      run: dotnet gitversion /output buildserver
 
     - name: Cache dependencies
       id: cache-nuget
