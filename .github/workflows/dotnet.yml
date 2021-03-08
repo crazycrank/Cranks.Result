@@ -46,9 +46,12 @@ jobs:
       if: steps.cache-gitversion.outputs.cache-hit != 'true'
       run: dotnet tool install GitVersion.Tool --tool-path ~/runner/.gitversion
         
+    - name: test
+      run: ls ~/runner/.gitversion/
+        
     - name: Determine Version
       id: gitversion
-      run: ~/runner/.gitversion/gitversion /output buildserver
+      run: dotnet run ~/runner/.gitversion/gitversion.dll /output buildserver
 
     - name: Cache dependencies
       id: cache-dependencies
