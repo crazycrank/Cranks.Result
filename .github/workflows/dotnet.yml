@@ -36,7 +36,6 @@ jobs:
         dotnet-version: 5.0.x
         
     - name: Install GitVersion
-      if: steps.cache-dotnet.outputs.cache-hit != 'true'
       uses: gittools/actions/gitversion/setup@v0.9.7
       with:
         versionSpec: '5.x'
