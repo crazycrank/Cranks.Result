@@ -21,13 +21,12 @@ jobs:
       with:
         fetch-depth: 0
         
-    - name: Cache .NET and Tools
+    - name: Cache .NET
       uses: actions/cache@v2
       id: cache-dotnet
       with:
-        # npm cache files are stored in `~/.npm` on Linux/macOS
         path: ~/runner/.dotnet
-        key: cache-dotnet-dependencies
+        key: ${{ runner.os }}-dotnet
         
     - name: Setup .NET
       if: steps.cache-dotnet.outputs.cache-hit != 'true'
@@ -35,8 +34,15 @@ jobs:
       with:
         dotnet-version: 5.0.x
         
+    - name: Cache GitVersion
+      uses: actions/cache@v2
+      id: cache-gitversion
+      with:
+        path: ~/runner/.gitversion.tool
+        key: ${{ runner.os }}-gitversion
+        
     - name: Install GitVersion
-      run: dotnet tool install GitVersion.Tool --global
+      run: dotnet tool install GitVersion.Tool --global --tool-path ~/runner/.gitversion.tool
         
     - name: Determine Version
       id: gitversion
@@ -48,9 +54,8 @@ jobs:
       id: cache-nuget
       uses: actions/cache@v2
       with:
-        # nuget packages files are stored in ~/.nuget/packages
         path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
+        key: ${{ runner.os }}-nuget
         
     - name: Restore dependencies
       run: dotnet restore
