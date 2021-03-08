@@ -55,7 +55,6 @@ jobs:
         key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
         
     - name: Restore dependencies
-      if: steps.cache-nuget.outputs.cache-hit != 'true'
       run: dotnet restore
 
     - name: Build
