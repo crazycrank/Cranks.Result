@@ -30,13 +30,13 @@ jobs:
         key: ${{ runner.os }}-dotnet
         
     - name: Setup .NET
-      if: steps.cache-dotnet.outputs.cache-hit != 'true'
+      if: steps.cache-dotnet-and-tools.outputs.cache-hit != 'true'
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
         
     - name: Install GitVersion
-      if: steps.cache-dotnet.outputs.cache-hit != 'true'
+      if: steps.cache-dotnet-and-tools.outputs.cache-hit != 'true'
       run: dotnet tool install GitVersion.Tool --global
         
     - name: Determine Version
@@ -44,7 +44,7 @@ jobs:
       run: dotnet gitversion /output buildserver
 
     - name: Cache dependencies
-      id: cache-nuget
+      id: cache-dependencies
       uses: actions/cache@v2
       with:
         path: ~/.nuget/packages
