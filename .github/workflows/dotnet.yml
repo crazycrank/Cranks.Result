@@ -26,15 +26,16 @@ jobs:
       with:
         # npm cache files are stored in `~/.npm` on Linux/macOS
         path: |
-          $HOME/gitversion-tool
-          $HOME/runner/.dotnet
+          ~/gitversion-tool
+          ~/runner/.dotnet
+          ~/.nuget/packages
         key: cache-static-dependencies
 
     - name: Install GitVersion
       uses: gittools/actions/gitversion/setup@v0.9.7
       with:
         versionSpec: '5.x'
-        toolPath: $HOME/gitversion-tool
+        tool-path: $HOME/gitversion-tool
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
@@ -48,7 +49,7 @@ jobs:
         useConfigFile: true
 
     - name: Restore dependencies
-      run: dotnet restore --verbosity detailed
+      run: dotnet restore
 
     - name: Build
       run: dotnet build --no-restore -p:VersionPrefix=${{ steps.gitversion.outputs.assemblySemVer }} -p:VersionSuffix=${{ steps.gitversion.outputs.preReleaseTag }} --configuration Release
