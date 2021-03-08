@@ -42,7 +42,7 @@ jobs:
         key: ${{ runner.os }}-gitversion
         
     - name: Install GitVersion
-      run: dotnet tool install GitVersion.Tool --global --tool-path ~/runner/.gitversion.tool
+      run: dotnet tool install GitVersion.Tool --tool-path ~/runner/.gitversion.tool
         
     - name: Determine Version
       id: gitversion
