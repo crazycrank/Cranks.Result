@@ -21,10 +21,10 @@ jobs:
       with:
         fetch-depth: 0
         
-    - name: Cache .NET & tools
+    - name: Cache .NET
       uses: actions/cache@v2
       # TODO better cache key?
-      id: cache-dotnet 
+      id: cache-dotnet
       with:
         path: ~/runner/.dotnet
         key: ${{ runner.os }}-dotnet
@@ -40,7 +40,7 @@ jobs:
       id: cache-gitversion 
       with:
         path: ~/runner/.gitversion
-        key: ${{ runner.os }}-dotnet
+        key: ${{ runner.os }}-gitversion
         
     - name: Install GitVersion
       if: steps.cache-gitversion.outputs.cache-hit != 'true'
