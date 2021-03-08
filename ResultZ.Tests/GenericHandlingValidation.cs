@@ -7,9 +7,9 @@ namespace ResultZ.Tests
     public class GenericHandlingValidation
     {
         [Fact]
-        public void CallingWithError_InAnUpcastedResultOfType_ReturnsFailedOfType()
+        public void CallingWithError_InAnUpcastedPassedOfType_ReturnsFailedOfType()
         {
-            IResult result = Result.Pass<string>("value");
+            IResult result = Result.Pass("value");
             var result2 = result.WithError("error");
 
             result2.ShouldBeOfType<Failed<string>>();
@@ -17,13 +17,33 @@ namespace ResultZ.Tests
         }
 
         [Fact]
-        public void CallingWithSuccess_InAnUpcastedResultOfType_ReturnsPassedOfType()
+        public void CallingWithSuccess_InAnUpcastedPassedOfType_ReturnsPassedOfType()
         {
-            IResult result = Result.Pass<string>("value");
+            IResult result = Result.Pass("value");
             var result2 = result.WithSuccess("success");
 
             result2.ShouldBeOfType<Passed<string>>();
             result2.Reasons.ShouldContain(new Success("success"));
+        }
+
+        [Fact]
+        public void CallingWithMessage_InAnUpcastedFailedOfType_IsStillFailedOfType()
+        {
+            IResult result = Result.Fail<string>();
+            var result2 = result.WithMessage("message");
+
+            result2.ShouldBeOfType<Failed<string>>();
+            result2.Message.ShouldBe("message");
+        }
+
+        [Fact]
+        public void CallingWithMessage_InAnUpcastedPassedOfType_IsStillPassedOfType()
+        {
+            IResult result = Result.Pass("value");
+            var result2 = result.WithMessage("message");
+
+            result2.ShouldBeOfType<Passed<string>>();
+            result2.Message.ShouldBe("message");
         }
     }
 }

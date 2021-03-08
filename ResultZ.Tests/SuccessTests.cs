@@ -19,7 +19,8 @@ namespace ResultZ.Tests
         [Fact]
         public void Pass_WithMessage_WithoutReasons()
         {
-            var result = Result.Pass("message");
+            var result = Result.Pass()
+                               .WithMessage("message");
 
             result.ShouldBeOfType<Passed>();
             result.Message.ShouldBe("message");
@@ -30,8 +31,8 @@ namespace ResultZ.Tests
         [Fact]
         public void Pass_WithoutMessage_WithReasons()
         {
-            // TODO this sucks. passing a success to a Result.Pass uses the Succcess as the value...
-            var result = Result.Pass(reasons: (Success)"success");
+            var result = Result.Pass()
+                               .WithSuccess("success");
 
             result.ShouldBeOfType<Passed>();
             result.Message.ShouldBeEmpty();
@@ -45,7 +46,9 @@ namespace ResultZ.Tests
         [Fact]
         public void Pass_WithMessage_WithReasons()
         {
-            var result = Result.Pass("message", (Success)"success");
+            var result = Result.Pass()
+                               .WithSuccess("success")
+                               .WithMessage("message");
 
             result.ShouldBeOfType<Passed>();
             result.Message.ShouldBe("message");
