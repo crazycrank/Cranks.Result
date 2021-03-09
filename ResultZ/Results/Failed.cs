@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ResultZ
@@ -52,6 +53,9 @@ namespace ResultZ
         {
         }
 
-        public TValue? Value => default;
+        // TODO: default or throw?
+        // case for default: accessing doesn't throw.
+        // case for throw: should never be accessed unchecked. basically illegal operation
+        public TValue Value => throw new InvalidOperationException("Do not access Value of Failed<TValue>. Check for Passed before accessing.");
     }
 }

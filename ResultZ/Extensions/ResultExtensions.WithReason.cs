@@ -7,6 +7,8 @@ namespace ResultZ
     public static partial class ResultExtensions
     {
         public static IResult WithReason(this IResult result, params IReason[] reasons) => result.WithReason(reasons.AsEnumerable());
+
+        // TODO: this is a very clean approech, but a pretty big performance overhead if the reason list gets especially large (e.g. 6 seconds for 10'000 errors). not sure if this should be a concern...
         public static IResult WithReason(this IResult result, IEnumerable<IReason> reasons) => reasons.Aggregate(result, (r, reason) => r.WithSingleReason(reason));
         public static IResult<TValue> WithReason<TValue>(this IResult<TValue> result, params IReason[] reasons) => result.WithReason(reasons.AsEnumerable());
         public static IResult<TValue> WithReason<TValue>(this IResult<TValue> result, IEnumerable<IReason> reasons)
