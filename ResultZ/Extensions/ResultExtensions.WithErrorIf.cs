@@ -1,5 +1,6 @@
 ﻿namespace ResultZ
 {
+    // TODO: needs overloads that return IResult<TValue> to keep consistency
     public static partial class ResultExtensions
     {
         public static IResult WithErrorIf<TError>(this IResult result, bool condition, TError error)
@@ -10,6 +11,7 @@
             where TError : Error, new()
             => result.WithErrorIf(condition, new TError());
 
+        // TODO: errors should be created using an action. Otherwise they need to be evaluated before passing, leading to ugly nullability issues (and similiar stuff)
         public static IResult WithErrorIf<TError, TSuccess>(this IResult result,
                                                        bool condition,
                                                        TError error,

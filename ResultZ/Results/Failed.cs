@@ -30,7 +30,7 @@ namespace ResultZ
         public bool HasPassed => false;
     }
 
-    // TODO does it make sense to have a failed without value?
+    // TODO does it make sense to have a failed with a value?
     public record Failed<TValue> : Failed, IResult<TValue>
     {
         internal Failed(params IReason[] reasons)
