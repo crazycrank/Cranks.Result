@@ -1,4 +1,6 @@
-﻿namespace ResultZ
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace ResultZ
 {
     public interface IResult : IReason
     {

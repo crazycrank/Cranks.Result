@@ -68,7 +68,7 @@ jobs:
 
     - name: Pack
       if: contains(env.GitVersion_BranchName, 'master')
-      run: dotnet pack ResultZ/ResultZ.csproj --no-build --configuration Release --output nupkgs -p:VersionPrefix=${{ env.GitVersion_MajorMinorPatch }} -p:VersionSuffix=${{ env.GitVersion_NuGetPreReleaseTagV2 }} --include-symbols
+      run: dotnet pack ResultZ/ResultZ.csproj --no-build --configuration Release --output nupkgs -p:VersionPrefix=${{ env.GitVersion_MajorMinorPatch }} -p:VersionSuffix=${{ env.GitVersion_NuGetPreReleaseTagV2 }} --include-symbols --include-source -p:SymbolPackageFormat=snupkg
 
     - name: Nuget Publish
       if: contains(env.GitVersion_BranchName, 'master')

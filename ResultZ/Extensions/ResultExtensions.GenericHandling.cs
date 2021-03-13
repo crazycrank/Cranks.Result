@@ -17,7 +17,6 @@ namespace ResultZ
                    {
                        Failed => Result.Fail<IResult>(),
                        Passed<MethodInfo> { Value: var genericMethod } => Result.Pass((IResult)genericMethod.Invoke(null, new object?[] { result, param })!),
-                       _ => throw new InvalidOperationException("Deriving from IResult is not supported"),
                    };
         }
 

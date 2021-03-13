@@ -1,4 +1,6 @@
-﻿using Shouldly;
+﻿using System;
+
+using Shouldly;
 
 using Xunit;
 
@@ -33,7 +35,7 @@ namespace ResultZ.Tests
 
             result.ShouldBeOfType<Failed<string>>();
             result.Reasons.ShouldContain(new Error("error"));
-            result.Value.ShouldBeNull();
+            ShouldThrowExtensions.ShouldThrow<InvalidOperationException>(() => result.Value);
         }
 
         [Fact]
