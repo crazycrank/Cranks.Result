@@ -2,7 +2,7 @@
 branches:
   master:
     tag: 'alpha'
-    increment: Patch
+    increment: Minor
 
   develop:
     tag: 'unstable'
