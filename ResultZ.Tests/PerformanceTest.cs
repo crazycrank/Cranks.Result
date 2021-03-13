@@ -22,7 +22,7 @@ namespace ResultZ.Tests
         public void Creating1000Successes_ShouldBeFast()
         {
             var elapsed = Measure(() => Result.Pass().WithError(Enumerable.Range(0, 1000).Select(i => (Error)i.ToString())));
-            elapsed.ShouldBeLessThanOrEqualTo(TimeSpan.FromMilliseconds(150));
+            elapsed.ShouldBeLessThanOrEqualTo(TimeSpan.FromMilliseconds(200));
         }
 
         [Fact]
