@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace ResultZ
 {
     public sealed class ResultBuilder
     {
-        private readonly List<(Func<bool> Predicate, Func<IReason> ReasonFunc)> _reasons = new();
+        private readonly List<IReason> _reasons = new();
 
         private string? _message;
         private bool _hasErrors;
@@ -22,7 +21,11 @@ namespace ResultZ
         public ResultBuilder WithSuccessIf(bool predicate, Func<Success> success) => WithSuccessIf(() => predicate, success);
         public ResultBuilder WithSuccessIf(Func<bool> predicate, Func<Success> success)
         {
-            _reasons.Add((predicate, success));
+            if (predicate())
+            {
+                _reasons.Add(success());
+            }
+
             return this;
         }
 
@@ -31,8 +34,12 @@ namespace ResultZ
         public ResultBuilder WithErrorIf(bool predicate, Func<Error> error) => WithErrorIf(() => predicate, error);
         public ResultBuilder WithErrorIf(Func<bool> predicate, Func<Error> error)
         {
-            _hasErrors = true;
-            _reasons.Add((predicate, error));
+            if (predicate())
+            {
+                _hasErrors = true;
+                _reasons.Add(error());
+            }
+
             return this;
         }
 
@@ -47,7 +54,7 @@ namespace ResultZ
                 result = result.WithMessage(_message);
             }
 
-            return result.WithReason(_reasons.Where(r => r.Predicate()).Select(r => r.ReasonFunc()));
+            return result.WithReason(_reasons);
         }
 
         // TODO some implicit conversion to a IResult would be nice, but conversions to interfaces are not allowed...
