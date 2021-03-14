@@ -26,7 +26,7 @@ namespace ResultZ
         {
             if (reasons.Any(r => r is Error))
             {
-                throw new InvalidOperationException("Cannot create Success containing an Error");
+                throw new ResultException("Cannot create Success containing an Error");
             }
         }
 
