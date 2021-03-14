@@ -1,7 +1,5 @@
-﻿using System;
-
-namespace ResultZ
+﻿namespace ResultZ
 {
-    public record UnexpectedError(Exception Exception, ReasonCollection? Reasons = null)
+    public record UnexpectedError(System.Exception Exception, ReasonCollection? Reasons = null)
         : Error(Exception.Message, Reasons ?? new());
 }

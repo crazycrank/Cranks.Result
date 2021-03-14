@@ -47,7 +47,7 @@ namespace ResultZ
         {
             if (!_hasErrors && _value is null)
             {
-                throw new InvalidOperationException("Can not create Passed<TValue> from builder without having a value assigned");
+                throw new ResultException("Can not create Passed<TValue> from builder without having a value assigned");
             }
 
             var result = _hasErrors
