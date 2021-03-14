@@ -1,5 +1,8 @@
 ﻿next-version: 0.1
-increment: None
 branches:
+  master:
+    increment: None
+
   develop:
     tag: 'alpha'
+    increment: None
