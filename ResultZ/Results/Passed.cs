@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace ResultZ
 {
@@ -32,6 +33,13 @@ namespace ResultZ
 
         public bool HasFailed => false;
         public bool HasPassed => true;
+
+        protected override bool PrintMembers(StringBuilder builder)
+        {
+            // custom PrintMembers implementation to not print HasPassed and HasFailed properties
+            base.PrintMembers(builder);
+            return true;
+        }
     }
 
     public record Passed<TValue> : Passed, IResult<TValue>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace ResultZ
 {
@@ -28,6 +29,13 @@ namespace ResultZ
 
         public bool HasFailed => true;
         public bool HasPassed => false;
+
+        protected override bool PrintMembers(StringBuilder builder)
+        {
+            // custom PrintMembers implementation to not print HasPassed and HasFailed properties
+            base.PrintMembers(builder);
+            return true;
+        }
     }
 
     // TODO does it make sense to have a failed with a value?
@@ -57,5 +65,12 @@ namespace ResultZ
         // case for default: accessing doesn't throw.
         // case for throw: should never be accessed unchecked. basically illegal operation
         public TValue Value => throw new ResultException("Do not access Value of Failed<TValue>. Check for Passed before accessing.", this);
+
+        protected override bool PrintMembers(StringBuilder builder)
+        {
+            // custom PrintMembers implementation to not print Value in case of Failed (as accessing Value of Failed always throws)
+            base.PrintMembers(builder);
+            return true;
+        }
     }
 }
