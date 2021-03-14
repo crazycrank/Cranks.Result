@@ -61,7 +61,7 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --no-restore --configuration Release -p:VersionPrefix=${{ env.GitVersion_MajorMinorPatch }} p:InformationalVersion=${{ env.GitVersion_InformationalVersion }}
+      run: dotnet build --no-restore --configuration Release -p:VersionPrefix=${{ env.GitVersion_MajorMinorPatch }} -p:InformationalVersion=${{ env.GitVersion_InformationalVersion }}
 
     - name: Test
       run: dotnet test --no-build --configuration Release --verbosity normal
