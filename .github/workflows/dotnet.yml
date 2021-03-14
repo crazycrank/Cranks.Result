@@ -73,3 +73,9 @@ jobs:
     - name: Nuget Publish
       if: contains(env.GitVersion_BranchName, 'master')
       run: dotnet nuget push nupkgs/ResultZ.${{ env.GitVersion_NuGetVersionV2 }}.nupkg --api-key ${{ secrets.NuGetAPIKey }} --source https://api.nuget.org/v3/index.json
+
+    - name: Tag commit with version
+      if: contains(env.GitVersion_BranchName, 'master')
+      run: |
+        git tag v${{ env.GitVersion_MajorMinorPatch }}
+        git push --tag
