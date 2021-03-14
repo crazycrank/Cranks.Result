@@ -62,6 +62,7 @@ jobs:
         key: ${{ runner.os }}-nuget2-${{ hashFiles('**/*.csproj') }}
         
     - name: Restore dependencies
+      if: steps.cache-dependencies.outputs.cache-hit != 'true'
       run: dotnet restore
 
     - name: Build
