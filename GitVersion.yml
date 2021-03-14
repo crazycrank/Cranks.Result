@@ -1,9 +1,8 @@
 ﻿next-version: 0.1
 branches:
   master:
-    tag: 'alpha'
-    increment: Patch
+    increment: Minor
 
   develop:
-    tag: 'unstable'
+    tag: 'alpha'
     increment: Patch

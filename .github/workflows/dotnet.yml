@@ -54,22 +54,33 @@ jobs:
       id: cache-dependencies
       uses: actions/cache@v2
       with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        path: |
+          ~/.nuget/packages
+          ResultZ/obj/project.assets.json
+          ResultZ.AspNetCore/obj/project.assets.json
+          ResultZ.Tests/obj/project.assets.json
+        key: ${{ runner.os }}-nuget2-${{ hashFiles('**/*.csproj') }}
         
     - name: Restore dependencies
+      if: steps.cache-dependencies.outputs.cache-hit != 'true'
       run: dotnet restore
 
     - name: Build
-      run: dotnet build --no-restore -p:VersionPrefix=${{ env.GitVersion_AssemblySemVer }} -p:VersionSuffix=${{ env.GitVersion_PreReleaseTag }} --configuration Release
+      run: dotnet build --no-restore --configuration Release -p:VersionPrefix=${{ env.GitVersion_MajorMinorPatch }} -p:InformationalVersion=${{ env.GitVersion_InformationalVersion }}
 
     - name: Test
       run: dotnet test --no-build --configuration Release --verbosity normal
 
     - name: Pack
       if: contains(env.GitVersion_BranchName, 'master')
-      run: dotnet pack ResultZ/ResultZ.csproj --no-build --configuration Release --output nupkgs -p:VersionPrefix=${{ env.GitVersion_MajorMinorPatch }} -p:VersionSuffix=${{ env.GitVersion_NuGetPreReleaseTagV2 }} --include-symbols --include-source -p:SymbolPackageFormat=snupkg
+      run: dotnet pack ResultZ/ResultZ.csproj --no-build --configuration Release --include-symbols --include-source -p:SymbolPackageFormat=snupkg --output nupkgs -p:VersionPrefix=${{ env.GitVersion_MajorMinorPatch }} 
 
     - name: Nuget Publish
       if: contains(env.GitVersion_BranchName, 'master')
-      run: dotnet nuget push nupkgs/ResultZ.${{ env.GitVersion_NuGetVersionV2 }}.nupkg --api-key ${{ secrets.NuGetAPIKey }} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push nupkgs/ResultZ.${{ env.GitVersion_MajorMinorPatch }}.nupkg --api-key ${{ secrets.NuGetAPIKey }} --source https://api.nuget.org/v3/index.json
+
+    - name: Tag commit with version
+      if: contains(env.GitVersion_BranchName, 'master')
+      run: |
+        git tag v${{ env.GitVersion_MajorMinorPatch }}
+        git push --tag
