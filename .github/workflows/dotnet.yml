@@ -54,8 +54,12 @@ jobs:
       id: cache-dependencies
       uses: actions/cache@v2
       with:
-        path: ~/.nuget/packages
-        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        path: |
+          ~/.nuget/packages
+          ResultZ/obj/project.assets.json
+          ResultZ.AspNetCore/obj/project.assets.json
+          ResultZ.Tests/obj/project.assets.json
+        key: ${{ runner.os }}-nuget2-${{ hashFiles('**/*.csproj') }}
         
     - name: Restore dependencies
       run: dotnet restore
