@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace ResultZ
 {
@@ -32,5 +33,24 @@ namespace ResultZ
         public ReasonCollection Reasons { get; }
 
         public static implicit operator Error(string message) => new(message);
+
+        protected virtual bool PrintMembers(StringBuilder builder)
+        {
+            // custom PrintMembers implementation to not print Reasons when Reasons is empty for better readability
+            builder.Append(nameof(Message));
+            builder.Append(" = ");
+            builder.Append(Message);
+
+            if (Reasons.Any())
+            {
+                builder.Append(", ");
+
+                builder.Append(nameof(Reasons));
+                builder.Append(" = ");
+                builder.Append(Reasons);
+            }
+
+            return true;
+        }
     }
 }

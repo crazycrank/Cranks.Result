@@ -1,6 +1,4 @@
-﻿using System.Collections;
-
-namespace ResultZ
+﻿namespace ResultZ
 {
     public interface IReason
     {
