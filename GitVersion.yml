@@ -1,8 +1,5 @@
 ﻿next-version: 0.1
+increment: None
 branches:
-  master:
-    increment: Minor
-
   develop:
     tag: 'alpha'
-    increment: Patch
