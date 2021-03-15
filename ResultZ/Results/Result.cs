@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-
-namespace ResultZ
+﻿namespace ResultZ
 {
-    public static class Result
+    // additional methods will be added using source generator
+    // ReSharper disable once PartialTypeWithSinglePart
+    public static partial class Result
     {
         public static IResult Pass() => new Passed();
         public static IResult<TValue> Pass<TValue>(TValue value) => new Passed<TValue>(value);
@@ -17,5 +17,6 @@ namespace ResultZ
         public static IResult<TValue> FailIf<TValue>(TValue value, bool condition) => condition ? new Failed<TValue>() : new Passed<TValue>(value);
 
         // TODO There needs to be some way to create results being neither failed nor passed. Some kind of builder pattern? Empty result?
+        // Solution: Source Generator :D
     }
 }

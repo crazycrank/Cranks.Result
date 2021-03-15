@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -61,9 +60,6 @@ namespace ResultZ
         {
         }
 
-        // TODO: default or throw?
-        // case for default: accessing doesn't throw.
-        // case for throw: should never be accessed unchecked. basically illegal operation
         public TValue Value => throw new ResultException("Do not access Value of Failed<TValue>. Check for Passed before accessing.", this);
 
         protected override bool PrintMembers(StringBuilder builder)
