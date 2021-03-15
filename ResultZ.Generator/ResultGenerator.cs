@@ -1,7 +1,10 @@
 ﻿using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Text;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ResultZ.Generator
 {
@@ -25,28 +28,26 @@ namespace ResultZ.Generator
         {
             var syntaxReceiver = (ResultSyntaxReceiver)context.SyntaxReceiver!;
 
-            var resultDeclaration = syntaxReceiver.ResultDeclaration;
-
-            var generatedCode = new StringBuilder(@"
-namespace ResultZ
-{
-    public static partial class Result
-    {");
-
-            foreach (var methodDeclaration in syntaxReceiver.MethodDeclarations)
+            foreach (var resultExtensionDeclaration in syntaxReceiver.ResultExtensionDeclarations)
             {
-                var syntaxTree = methodDeclaration.SyntaxTree;
-                var semanticModel = context.Compilation.GetSemanticModel(syntaxTree);
-                var rewriter = new ResultMethodRewriter(semanticModel);
-                var modifiedNode = rewriter.Visit(syntaxTree.GetRoot());
-                generatedCode.Append(@$"
-{modifiedNode}");
-            }
+                var rewriter = new ResultMethodRewriter();
+                var modifiedNode = rewriter.Visit(resultExtensionDeclaration.SyntaxTree.GetRoot());
 
-            generatedCode.Append(@"
-    }
-}");
-            context.AddSource(nameof(ResultGenerator), generatedCode.ToString());
+                context.AddSource(GetHintName(resultExtensionDeclaration), modifiedNode.GetText(Encoding.UTF8));
+            }
+        }
+
+        private static string GetHintName(ClassDeclarationSyntax classDeclaration)
+        {
+            var compilationUnit = FindCompilationUnit(classDeclaration) as CompilationUnitSyntax;
+            var filePath = compilationUnit!.SyntaxTree.FilePath;
+
+            return $"Result.{Path.GetFileNameWithoutExtension(filePath).Split('.').Last()}";
+
+            static SyntaxNode FindCompilationUnit(SyntaxNode node)
+            {
+                return node is CompilationUnitSyntax ? node : FindCompilationUnit(node.Parent!);
+            }
         }
     }
 }

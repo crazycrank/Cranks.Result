@@ -8,32 +8,25 @@ namespace ResultZ.Generator
 {
     internal class ResultSyntaxReceiver : ISyntaxReceiver
     {
-        public List<MethodDeclarationSyntax> MethodDeclarations { get; } = new();
-
-        public ClassDeclarationSyntax ResultDeclaration { get; private set; }
+        public HashSet<ClassDeclarationSyntax> ResultExtensionDeclarations { get; } = new();
 
         public void OnVisitSyntaxNode(SyntaxNode syntaxNode)
         {
-
             switch (syntaxNode)
             {
                 case MethodDeclarationSyntax
                      {
-                         Parent: ClassDeclarationSyntax { Identifier: { ValueText: "ResultExtensions" } },
+                         Parent: ClassDeclarationSyntax { Identifier: { ValueText: "ResultExtensions" } } resultExtensionsDeclaration,
                          Modifiers: var modifiers,
                          ParameterList: { Parameters: var parameters },
-                     } methodDeclarationSyntax:
+                     }:
                     if (modifiers.Any(t => t is { Text: "public" })
                         && modifiers.Any(t => t is { Text: "static" })
                         && parameters[0].Modifiers.Any(t => t is { Text: "this" }))
                     {
-                        MethodDeclarations.Add(methodDeclarationSyntax);
+                        ResultExtensionDeclarations.Add(resultExtensionsDeclaration);
                     }
 
-                    break;
-
-                case ClassDeclarationSyntax { Identifier: { ValueText: "Results" } } resultsDeclaration:
-                    ResultDeclaration = resultsDeclaration;
                     break;
             }
         }
