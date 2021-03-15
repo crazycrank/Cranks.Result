@@ -58,8 +58,9 @@ jobs:
           ~/.nuget/packages
           ResultZ/obj/project.assets.json
           ResultZ.AspNetCore/obj/project.assets.json
+          ResultZ.Generator/obj/project.assets.json
           ResultZ.Tests/obj/project.assets.json
-        key: ${{ runner.os }}-nuget2-${{ hashFiles('**/*.csproj') }}
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
         
     - name: Restore dependencies
       if: steps.cache-dependencies.outputs.cache-hit != 'true'
