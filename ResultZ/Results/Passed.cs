@@ -44,6 +44,12 @@ namespace ResultZ
 
     public record Passed<TValue> : Passed, IResult<TValue>
     {
+        private readonly TValue? _value;
+
+        internal Passed()
+        {
+        }
+
         internal Passed(TValue value, params IReason[] reasons)
             : this(value, reasons.AsEnumerable())
         {
@@ -62,9 +68,23 @@ namespace ResultZ
         internal Passed(TValue value, string message, IEnumerable<IReason> reasons)
             : base(message, reasons)
         {
-            Value = value;
+            _value = value;
         }
 
-        public TValue Value { get; }
+        public TValue Value => _value ?? throw new ResultException("Value must be set before accessing it");
+
+        protected override bool PrintMembers(StringBuilder builder)
+        {
+            if (base.PrintMembers(builder))
+            {
+                builder.Append(", ");
+            }
+
+            builder.Append(nameof(Value));
+            builder.Append(" = ");
+            builder.Append(_value?.ToString() ?? "null"); // allow printing even when _value is null (wrongful usage)
+
+            return true;
+        }
     }
 }

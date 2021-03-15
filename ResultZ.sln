@@ -15,8 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Directory.Build.props = Directory.Build.props
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
 		GitVersion.yml = GitVersion.yml
+		global.json = global.json
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ResultZ.Generator", "ResultZ.Generator\ResultZ.Generator.csproj", "{B8335853-9E0F-4A19-8139-D343EF4A6A87}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +39,10 @@ Global
 		{1A3342D7-0FE1-46A2-AE8B-FD67A5BD5E0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1A3342D7-0FE1-46A2-AE8B-FD67A5BD5E0A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1A3342D7-0FE1-46A2-AE8B-FD67A5BD5E0A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8335853-9E0F-4A19-8139-D343EF4A6A87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8335853-9E0F-4A19-8139-D343EF4A6A87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8335853-9E0F-4A19-8139-D343EF4A6A87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8335853-9E0F-4A19-8139-D343EF4A6A87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

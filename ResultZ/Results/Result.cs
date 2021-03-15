@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-
-namespace ResultZ
+﻿namespace ResultZ
 {
-    public static class Result
+    // additional methods will be added using source generator
+    // ReSharper disable once PartialTypeWithSinglePart
+    public static partial class Result
     {
         public static IResult Pass() => new Passed();
         public static IResult<TValue> Pass<TValue>(TValue value) => new Passed<TValue>(value);
