@@ -21,6 +21,7 @@
     <RepositoryUrl>https://github.com/crazycrank/Cranks.Result</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
+    <PackageTags>result results failure failed error exception handling success passed</PackageTags>
   </PropertyGroup>
 
 </Project>
