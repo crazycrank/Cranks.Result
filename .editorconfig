@@ -312,8 +312,6 @@ dotnet_naming_style.begins_with_i.required_suffix =
 dotnet_naming_style.begins_with_i.word_separator = 
 dotnet_naming_style.begins_with_i.capitalization = pascal_case
 
-
-
 dotnet_diagnostic.ca1716.severity = none # CA1716: Conflict with other language
 
 dotnet_diagnostic.sa0001.severity = none # SA0001: XML comment analysis is disabled due to project configuration
@@ -324,7 +322,6 @@ dotnet_diagnostic.sx1101.severity = warning # SX1101: Do not prefix local calls 
 dotnet_diagnostic.sa1200.severity = none # SA1200: Using directive should appear within a namespace declaration
 dotnet_diagnostic.sa1309.severity = none # SA1309: Field names should not begin with underscore
 
-dotnet_diagnostic.sa1600.severity = none # SA1600: Elements should be documented
 dotnet_diagnostic.ca1062.severity = none # CA1062: Validate arguments of public methods
 dotnet_diagnostic.sa1633.severity = none # SA1633: File should have header
 
@@ -333,7 +330,6 @@ dotnet_diagnostic.ide0005.severity = none # IDE0005: Unnecessary using
 # ReSharper properties
 resharper_csharp_blank_lines_around_invocable = 0
 resharper_space_within_single_line_array_initializer_braces = true
-
 
 # SA1601: Partial elements should be documented
 dotnet_diagnostic.sa1601.severity = none
@@ -349,3 +345,12 @@ dotnet_diagnostic.sa1516.severity = none
 
 # CS8509: The switch expression does not handle all possible values of its input type (it is not exhaustive).
 dotnet_diagnostic.CS8509.severity = silent
+
+# SA1623: Property summary documentation should match accessors
+dotnet_diagnostic.SA1623.severity = suggestion
+
+# SA1600: Elements should be documented
+dotnet_diagnostic.SA1600.severity = suggestion
+
+# SA1642: Constructor summary documentation should begin with standard text
+dotnet_diagnostic.SA1642.severity = suggestion

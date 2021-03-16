@@ -5,11 +5,38 @@ namespace Cranks.Result
 {
     public static partial class ResultExtensions
     {
+        /// <summary>
+        /// Creates a new instance of <see cref="IResult"/> with <paramref name="reasons"/> appended to <see cref="IReason.Reasons"/>.
+        /// </summary>
+        /// <param name="result">The source <see cref="IResult"/> object the returned object is based on.</param>
+        /// <param name="reasons">The <see cref="IReason"/>s to append to the result.</param>
+        /// <returns>A new instance of <see cref="IResult"/> with the requested modifications.</returns>
         public static IResult WithReason(this IResult result, params IReason[] reasons) => result.WithReason(reasons.AsEnumerable());
 
-        // TODO: this is a very clean approech, but a pretty big performance overhead if the reason list gets especially large (e.g. 6 seconds for 10'000 errors). not sure if this should be a concern...
+        /// <summary>
+        /// Creates a new instance of <see cref="IResult"/> with <paramref name="reasons"/> appended to <see cref="IReason.Reasons"/>.
+        /// </summary>
+        /// <param name="result">The source <see cref="IResult"/> object the returned object is based on.</param>
+        /// <param name="reasons">The <see cref="IReason"/>s to append to the result.</param>
+        /// <returns>A new instance of <see cref="IResult"/> with the requested modifications.</returns>
         public static IResult WithReason(this IResult result, IEnumerable<IReason> reasons) => reasons.Aggregate(result, (r, reason) => r.WithSingleReason(reason));
+
+        /// <summary>
+        /// Creates a new instance of <see cref="IResult{TValue}"/> with <paramref name="reasons"/> appended to <see cref="IReason.Reasons"/>.
+        /// </summary>
+        /// <param name="result">The source <see cref="IResult{TValue}"/> object the returned object is based on.</param>
+        /// <param name="reasons">The <see cref="IReason"/>s to append to the result.</param>
+        /// <typeparam name="TValue">The <see cref="IResult{TValue}"/>s underlying result type.</typeparam>
+        /// <returns>A new instance of <see cref="IResult{TValue}"/> with the requested modifications.</returns>
         public static IResult<TValue> WithReason<TValue>(this IResult<TValue> result, params IReason[] reasons) => result.WithReason(reasons.AsEnumerable());
+
+        /// <summary>
+        /// Creates a new instance of <see cref="IResult{TValue}"/> with <paramref name="reasons"/> appended to <see cref="IReason.Reasons"/>.
+        /// </summary>
+        /// <param name="result">The source <see cref="IResult{TValue}"/> object the returned object is based on.</param>
+        /// <param name="reasons">The <see cref="IReason"/>s to append to the result.</param>
+        /// <typeparam name="TValue">The <see cref="IResult{TValue}"/>s underlying result type.</typeparam>
+        /// <returns>A new instance of <see cref="IResult{TValue}"/> with the requested modifications.</returns>
         public static IResult<TValue> WithReason<TValue>(this IResult<TValue> result, IEnumerable<IReason> reasons)
             => reasons.Aggregate(result, (r, reason) => r.WithSingleReason(reason));
 
@@ -17,8 +44,8 @@ namespace Cranks.Result
         {
             return (result, reason) switch
                    {
-                       { Item1: Failed<TValue> } or { Item2: Error } => new Failed<TValue>(result.Message, result.Reasons.Append(reason)),
-                       { Item1: Passed<TValue> sucessful } => new Passed<TValue>(sucessful.Value, result.Message, sucessful.Reasons.Append(reason)),
+                       { result: Failed<TValue> } or { reason: Error } => new Failed<TValue>(result.Message, result.Reasons.Append(reason)),
+                       { result: Passed<TValue> passed } => new Passed<TValue>(passed.Value, result.Message, passed.Reasons.Append(reason)),
                    };
         }
 
@@ -31,8 +58,8 @@ namespace Cranks.Result
                        Passed<IResult> { Value: not null and var genericResult } => genericResult,
                        Failed => (result, reason) switch
                                  {
-                                     { Item1: Failed } or { Item2: Error } => new Failed(result.Message, result.Reasons.Append(reason)),
-                                     { Item1: Passed sucessful } => new Passed(result.Message, sucessful.Reasons.Append(reason)),
+                                     { result: Failed } or { reason: Error } => new Failed(result.Message, result.Reasons.Append(reason)),
+                                     { result: Passed passed } => new Passed(result.Message, passed.Reasons.Append(reason)),
                                  },
                    };
         }

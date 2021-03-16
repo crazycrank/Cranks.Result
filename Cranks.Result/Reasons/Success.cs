@@ -4,32 +4,57 @@ using System.Text;
 
 namespace Cranks.Result
 {
+    /// <summary>
+    /// A basic success record to encapsulate an otherwise untyped success. For more specific Success types it is recommended to derive from this record.<br/>
+    /// Successes are fully immutable. Manipulate it using the With* methods in <see cref="ResultExtensions"/>.<br />
+    /// Can be implicitly casted from string.
+    /// </summary>
     public record Success
         : IReason
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Success"/> record with the provided <paramref name="reasons"/>.
+        /// </summary>
+        /// <param name="reasons">The Successes <see cref="Reasons"/>.</param>
         public Success(params IReason[] reasons)
             : this(reasons.AsEnumerable())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Success"/> record with the provided <paramref name="reasons"/>.
+        /// </summary>
+        /// <param name="reasons">The Successes <see cref="Reasons"/>.</param>
         public Success(IEnumerable<IReason> reasons)
             : this(string.Empty, reasons)
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Success"/> record with the provided <paramref name="message"/> and <paramref name="reasons"/>.
+        /// </summary>
+        /// <param name="message">The Successes <see cref="Message"/>.</param>
+        /// <param name="reasons">The Successes <see cref="Reasons"/>.</param>
         public Success(string message, params IReason[] reasons)
             : this(message, reasons.AsEnumerable())
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Success"/> record with the provided <paramref name="message"/> and <paramref name="reasons"/>.
+        /// </summary>
+        /// <param name="message">The Successes <see cref="Message"/>.</param>
+        /// <param name="reasons">The Successes <see cref="Reasons"/>.</param>
         public Success(string message, IEnumerable<IReason> reasons)
         {
             Message = message;
             Reasons = new ReasonCollection(reasons);
         }
 
+        /// <inheritdoc />
         public string Message { get; }
 
+        /// <inheritdoc />
         public ReasonCollection Reasons { get; }
 
         public static implicit operator Success(string message) => new(message);

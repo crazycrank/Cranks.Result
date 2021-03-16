@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Cranks.Result
 {
+    /// <summary>
+    /// Indicates a passed operation.
+    /// </summary>
     public record Passed : Success, IResult
     {
         internal Passed(params IReason[] reasons)
@@ -30,7 +33,10 @@ namespace Cranks.Result
             }
         }
 
+        /// <inheritdoc />
         public bool HasFailed => false;
+
+        /// <inheritdoc />
         public bool HasPassed => true;
 
         protected override bool PrintMembers(StringBuilder builder)
@@ -41,6 +47,10 @@ namespace Cranks.Result
         }
     }
 
+    /// <summary>
+    /// Indicates a passed operation with value.
+    /// </summary>
+    /// <typeparam name="TValue">The results underlying value type.</typeparam>
     public record Passed<TValue> : Passed, IResult<TValue>
     {
         private readonly TValue? _value;
@@ -70,6 +80,9 @@ namespace Cranks.Result
             _value = value;
         }
 
+        /// <summary>
+        /// Gets the value of the passed operation.
+        /// </summary>
         public TValue Value => _value ?? throw new ResultException("Value must be set before accessing it");
 
         protected override bool PrintMembers(StringBuilder builder)

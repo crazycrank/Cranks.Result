@@ -1,7 +1,8 @@
 ﻿namespace Cranks.Result
 {
-    // additional methods will be added using source generator
-    // ReSharper disable once PartialTypeWithSinglePart
+    /// <summary>
+    /// Static factory class to create new <see cref="IResult"/>s.
+    /// </summary>
     public static partial class Result
     {
         public static IResult Pass() => new Passed();
@@ -15,8 +16,5 @@
 
         public static IResult FailIf(bool condition) => condition ? new Failed() : new Passed();
         public static IResult<TValue> FailIf<TValue>(TValue value, bool condition) => condition ? new Failed<TValue>() : new Passed<TValue>(value);
-
-        // TODO There needs to be some way to create results being neither failed nor passed. Some kind of builder pattern? Empty result?
-        // Solution: Source Generator :D
     }
 }

@@ -7,33 +7,41 @@ using System.Text;
 
 namespace Cranks.Result
 {
+    /// <summary>
+    /// An immutable collection of <see cref="IReason"/>s.
+    /// </summary>
     public sealed record ReasonCollection
         : IReadOnlyList<IReason>
     {
-        public ReasonCollection(params IReason[] reasons)
+        private readonly ImmutableList<IReason> _reasons = ImmutableList<IReason>.Empty;
+
+        internal ReasonCollection(params IReason[] reasons)
             : this(reasons.AsEnumerable())
         {
         }
 
-        public ReasonCollection(IEnumerable<IReason> reasons)
+        internal ReasonCollection(IEnumerable<IReason> reasons)
         {
-            Reasons = reasons.ToImmutableList();
+            _reasons = reasons.ToImmutableList();
         }
 
-        public int Count => Reasons.Count;
+        /// <inheritdoc />
+        public int Count => _reasons.Count;
 
-        private ImmutableList<IReason> Reasons { get; } = ImmutableList<IReason>.Empty;
+        /// <inheritdoc />
+        public IReason this[int index] => _reasons[index];
 
-        public IReason this[int index] => Reasons[index];
+        /// <inheritdoc />
+        public IEnumerator<IReason> GetEnumerator() => _reasons.GetEnumerator();
 
-        public IEnumerator<IReason> GetEnumerator() => Reasons.GetEnumerator();
+        /// <inheritdoc />
+        IEnumerator IEnumerable.GetEnumerator() => _reasons.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() => Reasons.GetEnumerator();
-
+        /// <inheritdoc />
         public override int GetHashCode()
         {
             var hashCode = default(HashCode);
-            foreach (var reason in Reasons)
+            foreach (var reason in _reasons)
             {
                 hashCode.Add(reason);
             }
@@ -43,9 +51,9 @@ namespace Cranks.Result
 
         private bool PrintMembers(StringBuilder builder)
         {
-            builder.Append(nameof(Reasons));
+            builder.Append(nameof(_reasons));
             builder.Append(" = [ ");
-            builder.Append(string.Join(", ", Reasons));
+            builder.Append(string.Join(", ", _reasons));
             builder.Append(" ]");
 
             return true;
@@ -55,7 +63,7 @@ namespace Cranks.Result
         {
             return other is not null
                    && EqualityContract == other.EqualityContract
-                   && Reasons.SequenceEqual(other.Reasons);
+                   && _reasons.SequenceEqual(other._reasons);
         }
     }
 }

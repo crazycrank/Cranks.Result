@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 
 namespace Cranks.Result
 {
+    /// <summary>
+    /// Indicates a failed operation.
+    /// </summary>
     public record Failed : Error, IResult
     {
         internal Failed(params IReason[] reasons)
@@ -26,7 +30,10 @@ namespace Cranks.Result
         {
         }
 
+        /// <inheritdoc />
         public bool HasFailed => true;
+
+        /// <inheritdoc />
         public bool HasPassed => false;
 
         protected override bool PrintMembers(StringBuilder builder)
@@ -37,7 +44,10 @@ namespace Cranks.Result
         }
     }
 
-    // TODO does it make sense to have a failed with a value?
+    /// <summary>
+    /// Indicates a failed operation with value.
+    /// </summary>
+    /// <typeparam name="TValue">The results underlying value type.</typeparam>
     public record Failed<TValue> : Failed, IResult<TValue>
     {
         internal Failed(params IReason[] reasons)
@@ -60,7 +70,14 @@ namespace Cranks.Result
         {
         }
 
-        public TValue Value => throw new ResultException("Do not access Value of Failed<TValue>. Check for Passed before accessing.", this);
+        /// <summary>
+        /// Always throws. Accessing a <see cref="Failed{TValue}"/>s error is an illegal operation.
+        /// </summary>
+        public TValue Value
+        {
+            [DoesNotReturn]
+            get => throw new ResultException("Do not access Value of Failed<TValue>. Check for Passed before accessing.", this);
+        }
 
         protected override bool PrintMembers(StringBuilder builder)
         {

@@ -2,19 +2,25 @@
 
 namespace Cranks.Result
 {
+    /// <summary>
+    /// Standard exception of the Cranks.Result library.
+    /// </summary>
     public sealed class ResultException : InvalidOperationException
     {
-        public ResultException(string message)
+        internal ResultException(string message)
             : base(message)
         {
         }
 
-        public ResultException(string message, IReason reason)
+        internal ResultException(string message, IReason reason)
             : this($"{message}{Environment.NewLine}{reason}")
         {
             Reason = reason;
         }
 
+        /// <summary>
+        /// If there is a <see cref="IReason"/> attached to the exception it can be accessed here.
+        /// </summary>
         public IReason? Reason { get; }
     }
 }
