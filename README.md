@@ -18,9 +18,9 @@ Personally I try to differentiate between errors that can happen by design, and 
 * A `GetAll` method can not fail by design (in most cases at least). It could fail if there is network error, but this would be an unexpected error which should still be thrown. In this case your method should return the result directly, without encapsulating it in a `IResult<TValue>`.
 
 A few good and more indepth reads on this topic:
-[Error handling: Exception or Result?](https://enterprisecraftsmanship.com/posts/error-handling-exception-or-result/) by Enterprise Craftsmanship
-[Exceptions for flow control in C#](https://enterprisecraftsmanship.com/posts/exceptions-for-flow-control/) by Enterprise Craftsmanship
-[Operation result](https://www.forevolve.com/en/articles/2018/03/19/operation-result/) by ForEvolve
+* [Error handling: Exception or Result?](https://enterprisecraftsmanship.com/posts/error-handling-exception-or-result/) by Enterprise Craftsmanship
+* [Exceptions for flow control in C#](https://enterprisecraftsmanship.com/posts/exceptions-for-flow-control/) by Enterprise Craftsmanship
+* [Operation result](https://www.forevolve.com/en/articles/2018/03/19/operation-result/) by ForEvolve
 
 ### `IReason` and `IResult`
 An `IReason` can either be an `Error` or a `Success` and is nothing more than a typed 1object encapsulating some error/success information.
@@ -130,12 +130,33 @@ private IResult Validate()
 In most cases, passing or failing in a method depends on different operations, and is not clear from the beginning.
 You can use a handful of useful methods to build up your results.
 ```csharp
-public IResult Method(int a, int b)
+public IResult<int> Method(int a, int b)
 {
-    return Result.WithErrorIf<int>(a < b, new Error("a is smaller than b"))
+    return Result.WithErrorIf(a < b, new Error("a is smaller than b"))
                  .WithErrorIf(a > b, "b is smaller than a") // strings get casted to Error/Success records if appropriate
                  .WithSuccessIf(a == b, new Success("a and b are equal"))
                  .WithValue(a * b); // value only gets added if Passed. In Failed scenarios it gets dropped.
+}
+```
+
+### Checking a methods `IResult`
+When you have a method that returns an `IResult`, you can take different actions depending on the result.
+It is recommended to use pattern matching for this case, of course you can also use a more classical approach.
+```csharp
+public IResult Method(int a, int b)
+{
+    var result = MethodThatReturnsResultOfInt();
+
+    switch (result)
+    {
+        case Passed<int> { Value: var value}:
+            _logger.LogInfo($"The method returned {value}");
+            break;
+
+        case Failed { Message: var message }:
+            _logger.LogWarning($"Something went wrong: {message}");
+            break;
+    }
 }
 ```
 
