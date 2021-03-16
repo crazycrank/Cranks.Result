@@ -10,6 +10,16 @@ namespace Cranks.Result
     {
         private static readonly MemoryCache _cache = new(new MemoryCacheOptions());
 
+        internal static IResult<IResult> HandleGenericVariant(this IResult result, string methodName)
+        {
+            // dogfooding
+            return GetGenericMethod(result.GetType(), methodName) switch
+                   {
+                       Failed => Result.Fail<IResult>(),
+                       Passed<MethodInfo> { Value: var genericMethod } => Result.Pass((IResult)genericMethod.Invoke(null, new object?[] { result })!),
+                   };
+        }
+
         internal static IResult<IResult> HandleGenericVariant<TParam>(this IResult result, string methodName, TParam param)
         {
             // dogfooding

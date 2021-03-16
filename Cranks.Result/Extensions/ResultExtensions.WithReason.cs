@@ -52,10 +52,9 @@ namespace Cranks.Result
         private static IResult WithSingleReason(this IResult result, IReason reason)
         {
             // dogfooding
-            // TODO: is it possible that the compiler realizes this is exhaustive?
             return HandleGenericVariant(result, nameof(WithSingleReason), reason) switch
                    {
-                       Passed<IResult> { Value: not null and var genericResult } => genericResult,
+                       Passed<IResult> { Value: var genericResult } => genericResult,
                        Failed => (result, reason) switch
                                  {
                                      { result: Failed } or { reason: Error } => new Failed(result.Message, result.Reasons.Append(reason)),
