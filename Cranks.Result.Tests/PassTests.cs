@@ -19,8 +19,7 @@ namespace Cranks.Result.Tests
         [Fact]
         public void Pass_WithMessage_WithoutReasons()
         {
-            var result = Result.Pass()
-                               .WithMessage("message");
+            var result = Result.WithMessage("message");
 
             result.ShouldBeOfType<Passed>();
             result.Message.ShouldBe("message");
