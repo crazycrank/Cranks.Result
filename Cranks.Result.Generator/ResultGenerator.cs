@@ -17,7 +17,7 @@ namespace Cranks.Result.Generator
             if (!Debugger.IsAttached)
             {
                 // uncomment to debug
-                ////Debugger.Launch();
+                Debugger.Launch();
             }
 #endif
 

@@ -46,12 +46,22 @@ namespace Cranks.Result.Generator
 
             if (node.Body is not null)
             {
-                node = node.RemoveNode(node.Body, SyntaxRemoveOptions.KeepNoTrivia)!;
+                node = node.RemoveNode(node.Body, SyntaxRemoveOptions.KeepExteriorTrivia)!;
             }
 
             if (node.ExpressionBody is not null)
             {
-                node = node.RemoveNode(node.ExpressionBody, SyntaxRemoveOptions.KeepNoTrivia)!;
+                node = node.RemoveNode(node.ExpressionBody, SyntaxRemoveOptions.KeepExteriorTrivia)!;
+            }
+
+            // remove documentation of "this" parameter
+            var commentNode = node.GetLeadingTrivia()
+                                  .SingleOrDefault(t => t is { RawKind: (int)SyntaxKind.SingleLineCommentTrivia } comment
+                                                        && comment.ToString().Contains("<param name=\"result\">"));
+            if (commentNode != default)
+            {
+                var index = node.GetLeadingTrivia().IndexOf(commentNode) - 1;
+                node = node.WithLeadingTrivia(node.GetLeadingTrivia().RemoveAt(index).RemoveAt(index).RemoveAt(index)); // remove whitespace before, comment and newline after
             }
 
             // new Passed() or new Passed<TValue>()
@@ -59,7 +69,7 @@ namespace Cranks.Result.Generator
                                                                                             ? "Passed<TValue>"
                                                                                             : "Passed"),
                                                                     ArgumentList(),
-                                                                    null);
+                                                                    null).NormalizeWhitespace();
 
             // the method name, eg WithError or WithError<TError>
             SimpleNameSyntax methodNameSyntax = node.TypeParameterList is null
@@ -77,7 +87,7 @@ namespace Cranks.Result.Generator
             var invocationExpression = InvocationExpression(memberAccessExpression, ArgumentList(default(SeparatedSyntaxList<ArgumentSyntax>).AddRange(_parameters!.Parameters.Select(p => Argument(IdentifierName(p.Identifier))))));
 
             // => new Passed<TValue>().WithError(error)
-            var arrowExpression = ArrowExpressionClause(invocationExpression).NormalizeWhitespace();
+            var arrowExpression = ArrowExpressionClause(invocationExpression);
 
             return base.VisitMethodDeclaration(node.WithExpressionBody(arrowExpression));
         }
