@@ -1,7 +1,7 @@
 ﻿# Cranks.Result
 A simple, strongly typed and boilerplate poor implementation of the Result pattern.
 
-[![.NET](https://github.com/crazycrank/Cranks.Result/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/crazycrank/Cranks.Result/actions/workflows/dotnet.yml)
+![Nuget](https://img.shields.io/nuget/v/Cranks.Result) [![.NET](https://github.com/crazycrank/Cranks.Result/actions/workflows/dotnet.yml/badge.svg)](https://github.com/crazycrank/Cranks.Result/actions/workflows/dotnet.yml)
 
 ## Description
 
