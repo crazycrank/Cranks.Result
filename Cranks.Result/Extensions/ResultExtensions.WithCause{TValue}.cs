@@ -28,7 +28,7 @@ namespace Cranks.Result
             => (result, cause) switch
                {
                    { result: Failed<TValue> } or { cause: Error } => new Failed<TValue>(result.Message, result.Causes.Append(cause)),
-                   { result: Passed<TValue> passed } => new Passed<TValue>(passed.Value, result.Message, passed.Causes.Append(cause)),
+                   { result: Passed<TValue> passed } => new Passed<TValue>(passed.ValueInternal, result.Message, passed.Causes.Append(cause)),
                };
     }
 }

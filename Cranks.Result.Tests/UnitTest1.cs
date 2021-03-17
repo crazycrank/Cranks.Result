@@ -6,62 +6,38 @@ using Xunit;
 
 namespace Cranks.Result.Tests
 {
-    public class UnitTest1
+    public class IntegrationTests
     {
         [Fact]
-        public void Test1()
+        public void ComplexErrorTree()
         {
-            var result = Result.Pass();
-
-            result.ShouldBeOfType<Passed>();
-            result.Causes.ShouldBeEmpty();
-        }
-
-        [Fact]
-        public void Test2()
-        {
-            var result = Result.Pass("value");
-
-            result.ShouldBeOfType<Passed<string>>();
-            result.Causes.ShouldBeEmpty();
-            result.Value.ShouldBe("value");
-        }
-
-        [Fact]
-        public void Test3()
-        {
-            var result = Result.Pass("value")
-                               .WithError("error");
-
-            result.ShouldBeOfType<Failed<string>>();
-            result.Causes.ShouldContain(new Error("error"));
-            ShouldThrowExtensions.ShouldThrow<InvalidOperationException>(() => result.Value);
-        }
-
-        [Fact]
-        public void Test5()
-        {
-            var innerResult = Result.Fail()
-                                    .WithMessage("inner")
-                                    .WithError("message")
+            var innerResult = Result.WithMessage("inner")
+                                    .WithError("message1")
                                     .WithError("message2");
 
-            var result = Result.Fail()
-                               .WithMessage("root")
+            var result = Result.WithMessage("root")
                                .WithCause(innerResult);
 
-            result.ShouldBeOfType<Failed>();
-            result.Message.ShouldBe("root");
-            result.Causes.Count.ShouldBe(1);
+            result.ShouldBe(new Failed("root",
+                                       new Failed("inner",
+                                                  new Error("message1"),
+                                                  new Error("message2"))));
+        }
 
-            var rootError = result.Causes[0];
-            rootError.Message.ShouldBe("inner");
+        [Fact]
+        public void ComplexErrorTree_Generic()
+        {
+            var innerResult = Result.WithMessage<int>("inner")
+                                    .WithError("message1")
+                                    .WithError("message2");
 
-            rootError.Causes.Count.ShouldBe(2);
-            rootError.Causes[0].Message.ShouldBe("message");
-            rootError.Causes[0].Causes.ShouldBeEmpty();
-            rootError.Causes[1].Message.ShouldBe("message2");
-            rootError.Causes[1].Causes.ShouldBeEmpty();
+            var result = Result.WithMessage<int>("root")
+                               .WithCause(innerResult);
+
+            result.ShouldBe(new Failed<int>("root",
+                                            new Failed<int>("inner",
+                                                            new Error("message1"),
+                                                            new Error("message2"))));
         }
     }
 }

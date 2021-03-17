@@ -184,9 +184,9 @@ public IResult Method()
 }
 ```
 
-## Todos
-- [ ] Unit Tests
+## Todos and possible enhancements
 - [ ] Analyzer which throws an error when trying to derive from IResult outside of the library
-
-### Possible future enhancements
+- [ ] Improved Usage: WithMessageIfPassed, WithMessageIfFailed, Try, TryOrError, WithValueIf, WithMessageIf. Others?
+- [ ] Idea to improve source generation to provide Result<TValue>.FactoryMethods. But it has downsides... Analyze more.
 - [ ] ASP.NET Core wrapper. Provide base error types and mapping rules for IActionResult so that results can be simply returned
+- [ ] Stringifier to modify how errors get converted to strings?

@@ -6,4 +6,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Cranks.Result.Generator\Cranks.Result.Generator.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
   </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>Cranks.Result.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
 </Project>

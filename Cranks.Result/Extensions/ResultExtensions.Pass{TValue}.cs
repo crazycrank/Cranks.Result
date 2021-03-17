@@ -12,7 +12,7 @@
         public static IResult<TValue> Pass<TValue>(this IResult<TValue> result)
             => result switch
                {
-                   Passed<TValue> passed => new Passed<TValue>(passed.Value, passed.Message, passed.Causes),
+                   Passed<TValue> passed => new Passed<TValue>(passed.ValueInternal, passed.Message, passed.Causes),
                    Failed => new Failed<TValue>(result.Message, result.Causes),
                };
 

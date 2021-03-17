@@ -11,7 +11,7 @@
         public static IResult WithMessage(this IResult result, string message)
         => HandleGenericVariant(result, nameof(WithMessage), message) switch
         {
-            Passed<IResult> { Value: not null and var genericResult } => genericResult,
+            Passed<IResult> { Value: var genericResult } => genericResult,
             Failed => result switch
             {
                 Failed => new Failed(message, result.Causes),

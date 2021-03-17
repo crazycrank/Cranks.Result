@@ -2,7 +2,7 @@
 
 using Xunit;
 
-namespace Cranks.Result.Tests
+namespace Cranks.Result.Tests.Utils
 {
     public class GenericHandlingValidation
     {

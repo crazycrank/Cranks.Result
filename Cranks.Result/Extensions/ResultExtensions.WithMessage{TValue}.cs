@@ -13,7 +13,7 @@
             => result switch
                {
                    Failed => new Failed<TValue>(message, result.Causes),
-                   Passed<TValue> passed => new Passed<TValue>(passed.Value, message, result.Causes),
+                   Passed<TValue> passed => new Passed<TValue>(passed.ValueInternal, message, result.Causes),
                };
     }
 }
