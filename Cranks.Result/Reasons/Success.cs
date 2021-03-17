@@ -12,6 +12,11 @@ namespace Cranks.Result
     public record Success
         : IReason
     {
+        public Success()
+            : this(Enumerable.Empty<IReason>())
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Success"/> record with the provided <paramref name="reasons"/>.
         /// </summary>

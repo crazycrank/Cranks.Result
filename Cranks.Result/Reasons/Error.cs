@@ -12,6 +12,11 @@ namespace Cranks.Result
     public record Error
         : IReason
     {
+        public Error()
+            : this(Enumerable.Empty<IReason>())
+        {
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Error"/> record with the provided <paramref name="reasons"/>.
         /// </summary>

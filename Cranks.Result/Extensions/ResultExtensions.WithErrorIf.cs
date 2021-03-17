@@ -12,7 +12,7 @@ namespace Cranks.Result
         /// <param name="error">The <see cref="Error"/> that is added when <paramref name="condition"/> is true.</param>
         /// <returns>A new instance of <see cref="IResult"/> with the requested modifications.</returns>
         public static IResult WithErrorIf(this IResult result, bool condition, Error error)
-            => condition ? result.WithError(error) : result;
+            => condition ? result.WithError(error) : result.Pass();
 
         /// <summary>
         /// Creates a new instance of <see cref="IResult"/> with <paramref name="error"/> added to <see cref="IReason.Causes"/> if <paramref name="condition"/> is true.
@@ -30,33 +30,6 @@ namespace Cranks.Result
             => condition ? result.WithError(error) : result.WithSuccess(orSuccess);
 
         /// <summary>
-        /// Creates a new instance of <see cref="IResult{TValue}"/> with <paramref name="error"/> added to <see cref="IReason.Causes"/> if <paramref name="condition"/> is true.
-        /// </summary>
-        /// <param name="result">The source <see cref="IResult{TValue}"/> object the returned object is based on.</param>
-        /// <param name="condition"><paramref name="error"/> is only added to the returned object if this is true.</param>
-        /// <param name="error">The <see cref="Error"/> that is added when <paramref name="condition"/> is true.</param>
-        /// <typeparam name="TValue">The <see cref="IResult{TValue}"/>s underlying result type.</typeparam>
-        /// <returns>A new instance of <see cref="IResult{TValue}"/> with the requested modifications.</returns>
-        public static IResult<TValue> WithErrorIf<TValue>(this IResult<TValue> result, bool condition, Error error)
-            => condition ? result.WithError(error) : result;
-
-        /// <summary>
-        /// Creates a new instance of <see cref="IResult{TValue}"/> with <paramref name="error"/> added to <see cref="IReason.Causes"/> if <paramref name="condition"/> is true.
-        /// If <paramref name="condition"/> is false, <paramref name="orSuccess"/> is instead added to the <see cref="IReason.Causes"/> collection.
-        /// </summary>
-        /// <param name="result">The source <see cref="IResult{TValue}"/> object the returned object is based on.</param>
-        /// <param name="condition">Decides if <paramref name="error"/> or <paramref name="orSuccess"/> should be added to the returned object.</param>
-        /// <param name="error">The <see cref="Error"/> that is added when <paramref name="condition"/> is true.</param>
-        /// <param name="orSuccess">The <see cref="Success"/> that is added when <paramref name="condition"/> is false.</param>
-        /// <typeparam name="TValue">The <see cref="IResult{TValue}"/>s underlying result type.</typeparam>
-        /// <returns>A new instance of <see cref="IResult{TValue}"/> with the requested modifications.</returns>
-        public static IResult<TValue> WithErrorIf<TValue>(this IResult<TValue> result,
-                                                          bool condition,
-                                                          Error error,
-                                                          Success orSuccess)
-            => condition ? result.WithError(error) : result.WithSuccess(orSuccess);
-
-        /// <summary>
         /// Creates a new <see cref="IResult"/> with <paramref name="error"/> added to <see cref="IReason.Causes"/> if <paramref name="condition"/> is true.
         /// </summary>
         /// <param name="result">The source <see cref="IResult"/> object the returned object is based on.</param>
@@ -64,7 +37,7 @@ namespace Cranks.Result
         /// <param name="error">The <see cref="Error"/> that is added when <paramref name="condition"/> is true. </param>
         /// <returns>A new instance of <see cref="IResult"/> with the requested modifications.</returns>
         public static IResult WithErrorIf(this IResult result, bool condition, Func<Error> error)
-            => condition ? result.WithError(error()) : result;
+            => condition ? result.WithError(error()) : result.Pass();
 
         /// <summary>
         /// Creates a new instance of <see cref="IResult"/> with <paramref name="error"/> added to <see cref="IReason.Causes"/> if <paramref name="condition"/> is true.
@@ -79,33 +52,6 @@ namespace Cranks.Result
                                           bool condition,
                                           Func<Error> error,
                                           Func<Success> orSuccess)
-            => condition ? result.WithError(error()) : result.WithSuccess(orSuccess());
-
-        /// <summary>
-        /// Creates a new instance of <see cref="IResult{TValue}"/> with <paramref name="error"/> added to <see cref="IReason.Causes"/> if <paramref name="condition"/> is true.
-        /// </summary>
-        /// <param name="result">The source <see cref="IResult{TValue}"/> object the returned object is based on.</param>
-        /// <param name="condition"><paramref name="error"/> is only added to the returned object if this is true.</param>
-        /// <param name="error">The <see cref="Error"/> that is added when <paramref name="condition"/> is true.</param>
-        /// <typeparam name="TValue">The <see cref="IResult{TValue}"/>s underlying result type.</typeparam>
-        /// <returns>A new instance of <see cref="IResult{TValue}"/> with the requested modifications.</returns>
-        public static IResult<TValue> WithErrorIf<TValue>(this IResult<TValue> result, bool condition, Func<Error> error)
-            => condition ? result.WithError(error()) : result;
-
-        /// <summary>
-        /// Creates a new instance of <see cref="IResult{TValue}"/> with <paramref name="error"/> added to <see cref="IReason.Causes"/> if <paramref name="condition"/> is true.
-        /// If <paramref name="condition"/> is false, <paramref name="orSuccess"/> is instead added to the <see cref="IReason.Causes"/> collection.
-        /// </summary>
-        /// <param name="result">The source <see cref="IResult{TValue}"/> object the returned object is based on.</param>
-        /// <param name="condition">Decides if <paramref name="error"/> or <paramref name="orSuccess"/> should be added to the returned object.</param>
-        /// <param name="error">The <see cref="Error"/> that is added when <paramref name="condition"/> is true.</param>
-        /// <param name="orSuccess">The <see cref="Success"/> that is added when <paramref name="condition"/> is false.</param>
-        /// <typeparam name="TValue">The <see cref="IResult{TValue}"/>s underlying result type.</typeparam>
-        /// <returns>A new instance of <see cref="IResult{TValue}"/> with the requested modifications.</returns>
-        public static IResult<TValue> WithErrorIf<TValue>(this IResult<TValue> result,
-                                                          bool condition,
-                                                          Func<Error> error,
-                                                          Func<Success> orSuccess)
             => condition ? result.WithError(error()) : result.WithSuccess(orSuccess());
     }
 }

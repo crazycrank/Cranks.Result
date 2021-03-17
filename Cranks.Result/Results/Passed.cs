@@ -83,7 +83,9 @@ namespace Cranks.Result
         /// <summary>
         /// Gets the value of the passed operation.
         /// </summary>
-        public TValue Value => _value ?? throw new ResultException("Value must be set before accessing it");
+        public TValue Value => _value ?? throw new ResultException("Value must be set before accessing it"); // TODO: right now this is not throwing for value types. Not sure if this is a problem.
+
+        internal TValue ValueInternal => _value!; // not true, but how it is intended to be used
 
         protected override bool PrintMembers(StringBuilder builder)
         {
