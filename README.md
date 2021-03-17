@@ -160,6 +160,30 @@ public IResult Method(int a, int b)
 }
 ```
 
+### Custom `Error`s and `Success`es
+It is possible (and recommended) to use your own typed `Error` and `Success` objects.
+Although it is possible to use the Cranks.Result with just the default `Error` and `Success` objects, you get much more out of it when using them.
+
+Errors are simple records and can be defined with a single line of code!
+This makes them easy to define without cluttering your application in lots of boilerplate code.
+```csharp
+public record MySimpleError : Error;
+
+public record MyErrorWithDataFields(int value) : Error;
+
+public record MyErrorWithCustomMessage(int value) : Error($"This value is invalid: {value}");
+```
+
+You can use your customized errors everywhere you would otherwise use an error:
+```csharp
+public IResult Method()
+{
+    return Result.WithError<MySimpleError>()
+                 .WithError(new MyErrorWithDataFields(42))
+                 .WithErrorIf(condition, new MyErrorWithCustomMessage(1337));
+}
+```
+
 ## Todos
 - [ ] Unit Tests
 - [ ] Analyzer which throws an error when trying to derive from IResult outside of the library
