@@ -9,25 +9,25 @@ namespace Cranks.Result
     /// </summary>
     public record Passed : Success, IResult
     {
-        internal Passed(params IReason[] reasons)
-            : this(reasons.AsEnumerable())
+        internal Passed(params IReason[] causes)
+            : this(causes.AsEnumerable())
         {
         }
 
-        internal Passed(IEnumerable<IReason> reasons)
-            : this(string.Empty, reasons)
+        internal Passed(IEnumerable<IReason> causes)
+            : this(string.Empty, causes)
         {
         }
 
-        internal Passed(string message, params IReason[] reasons)
-            : this(message, reasons.AsEnumerable())
+        internal Passed(string message, params IReason[] causes)
+            : this(message, causes.AsEnumerable())
         {
         }
 
-        internal Passed(string message, IEnumerable<IReason> reasons)
-            : base(message, reasons)
+        internal Passed(string message, IEnumerable<IReason> causes)
+            : base(message, causes)
         {
-            if (reasons.Any(r => r is Error))
+            if (causes.Any(r => r is Error))
             {
                 throw new ResultException("Cannot create Success containing an Error");
             }
@@ -59,23 +59,23 @@ namespace Cranks.Result
         {
         }
 
-        internal Passed(TValue value, params IReason[] reasons)
-            : this(value, reasons.AsEnumerable())
+        internal Passed(TValue value, params IReason[] causes)
+            : this(value, causes.AsEnumerable())
         {
         }
 
-        internal Passed(TValue value, IEnumerable<IReason> reasons)
-            : this(value, string.Empty, reasons)
+        internal Passed(TValue value, IEnumerable<IReason> causes)
+            : this(value, string.Empty, causes)
         {
         }
 
-        internal Passed(TValue value, string message, params IReason[] reasons)
-            : this(value, message, reasons.AsEnumerable())
+        internal Passed(TValue value, string message, params IReason[] causes)
+            : this(value, message, causes.AsEnumerable())
         {
         }
 
-        internal Passed(TValue value, string message, IEnumerable<IReason> reasons)
-            : base(message, reasons)
+        internal Passed(TValue value, string message, IEnumerable<IReason> causes)
+            : base(message, causes)
         {
             _value = value;
         }

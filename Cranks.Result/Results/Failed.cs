@@ -10,23 +10,23 @@ namespace Cranks.Result
     /// </summary>
     public record Failed : Error, IResult
     {
-        internal Failed(params IReason[] reasons)
-            : this(reasons.AsEnumerable())
+        internal Failed(params IReason[] causes)
+            : this(causes.AsEnumerable())
         {
         }
 
-        internal Failed(IEnumerable<IReason> reasons)
-            : this(string.Empty, reasons)
+        internal Failed(IEnumerable<IReason> causes)
+            : this(string.Empty, causes)
         {
         }
 
-        internal Failed(string message, params IReason[] reasons)
-            : this(message, reasons.AsEnumerable())
+        internal Failed(string message, params IReason[] causes)
+            : this(message, causes.AsEnumerable())
         {
         }
 
-        internal Failed(string message, IEnumerable<IReason> reasons)
-            : base(message, reasons)
+        internal Failed(string message, IEnumerable<IReason> causes)
+            : base(message, causes)
         {
         }
 
@@ -50,23 +50,23 @@ namespace Cranks.Result
     /// <typeparam name="TValue">The results underlying value type.</typeparam>
     public record Failed<TValue> : Failed, IResult<TValue>
     {
-        internal Failed(params IReason[] reasons)
-            : this(reasons.AsEnumerable())
+        internal Failed(params IReason[] causes)
+            : this(causes.AsEnumerable())
         {
         }
 
-        internal Failed(IEnumerable<IReason> reasons)
-            : this(string.Empty, reasons)
+        internal Failed(IEnumerable<IReason> causes)
+            : this(string.Empty, causes)
         {
         }
 
-        internal Failed(string message, params IReason[] reasons)
-            : this(message, reasons.AsEnumerable())
+        internal Failed(string message, params IReason[] causes)
+            : this(message, causes.AsEnumerable())
         {
         }
 
-        internal Failed(string message, IEnumerable<IReason> reasons)
-            : base(message, reasons)
+        internal Failed(string message, IEnumerable<IReason> causes)
+            : base(message, causes)
         {
         }
 

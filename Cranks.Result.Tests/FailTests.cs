@@ -15,50 +15,47 @@ namespace Cranks.Result.Tests
 
             result.ShouldBeOfType<Failed>();
             result.Message.ShouldBeEmpty();
-            result.Reasons.ShouldBeEmpty();
+            result.Causes.ShouldBeEmpty();
         }
 
         [Fact]
         public void Fail_WithMessage_WithoutReasons()
         {
-            var result = Result.Fail()
-                               .WithMessage("message");
+            var result = Result.WithMessage("message");
 
             result.ShouldBeOfType<Failed>();
             result.Message.ShouldBe("message");
-            result.Reasons.ShouldBeEmpty();
-            result.Reasons.ShouldBeEmpty();
+            result.Causes.ShouldBeEmpty();
+            result.Causes.ShouldBeEmpty();
         }
 
         [Fact]
         public void Fail_WithoutMessage_WithReasons()
         {
-            var result = Result.Fail()
-                               .WithError("error");
+            var result = Result.WithError("error");
 
             result.ShouldBeOfType<Failed>();
             result.Message.ShouldBeEmpty();
-            result.Reasons.Count.ShouldBe(1);
+            result.Causes.Count.ShouldBe(1);
 
-            result.Reasons[0].ShouldBeOfType<Error>();
-            result.Reasons[0].Message.ShouldBe("error");
-            result.Reasons[0].Reasons.ShouldBeEmpty();
+            result.Causes[0].ShouldBeOfType<Error>();
+            result.Causes[0].Message.ShouldBe("error");
+            result.Causes[0].Causes.ShouldBeEmpty();
         }
 
         [Fact]
         public void Fail_WithMessage_WithReasons()
         {
-            var result = Result.Fail()
-                               .WithError("error")
+            var result = Result.WithError("error")
                                .WithMessage("message");
 
             result.ShouldBeOfType<Failed>();
             result.Message.ShouldBe("message");
-            result.Reasons.Count.ShouldBe(1);
+            result.Causes.Count.ShouldBe(1);
 
-            result.Reasons[0].ShouldBeOfType<Error>();
-            result.Reasons[0].Message.ShouldBe("error");
-            result.Reasons[0].Reasons.ShouldBeEmpty();
+            result.Causes[0].ShouldBeOfType<Error>();
+            result.Causes[0].Message.ShouldBe("error");
+            result.Causes[0].Causes.ShouldBeEmpty();
         }
 
         [Fact]
@@ -69,7 +66,7 @@ namespace Cranks.Result.Tests
             result.ShouldBeOfType<Failed<int>>();
             ShouldThrowExtensions.ShouldThrow<InvalidOperationException>(() => result.Value);
             result.Message.ShouldBeEmpty();
-            result.Reasons.ShouldBeEmpty();
+            result.Causes.ShouldBeEmpty();
         }
 
         [Fact]
@@ -81,8 +78,8 @@ namespace Cranks.Result.Tests
             result.ShouldBeOfType<Failed<int>>();
             ShouldThrowExtensions.ShouldThrow<InvalidOperationException>(() => result.Value);
             result.Message.ShouldBe("message");
-            result.Reasons.ShouldBeEmpty();
-            result.Reasons.ShouldBeEmpty();
+            result.Causes.ShouldBeEmpty();
+            result.Causes.ShouldBeEmpty();
         }
 
         [Fact]
@@ -94,11 +91,11 @@ namespace Cranks.Result.Tests
             result.ShouldBeOfType<Failed<int>>();
             ShouldThrowExtensions.ShouldThrow<InvalidOperationException>(() => result.Value);
             result.Message.ShouldBeEmpty();
-            result.Reasons.Count.ShouldBe(1);
+            result.Causes.Count.ShouldBe(1);
 
-            result.Reasons[0].ShouldBeOfType<Error>();
-            result.Reasons[0].Message.ShouldBe("error");
-            result.Reasons[0].Reasons.ShouldBeEmpty();
+            result.Causes[0].ShouldBeOfType<Error>();
+            result.Causes[0].Message.ShouldBe("error");
+            result.Causes[0].Causes.ShouldBeEmpty();
         }
 
         [Fact]
@@ -111,11 +108,11 @@ namespace Cranks.Result.Tests
             result.ShouldBeOfType<Failed<int>>();
             ShouldThrowExtensions.ShouldThrow<InvalidOperationException>(() => result.Value);
             result.Message.ShouldBe("message");
-            result.Reasons.Count.ShouldBe(1);
+            result.Causes.Count.ShouldBe(1);
 
-            result.Reasons[0].ShouldBeOfType<Error>();
-            result.Reasons[0].Message.ShouldBe("error");
-            result.Reasons[0].Reasons.ShouldBeEmpty();
+            result.Causes[0].ShouldBeOfType<Error>();
+            result.Causes[0].Message.ShouldBe("error");
+            result.Causes[0].Causes.ShouldBeEmpty();
         }
     }
 }

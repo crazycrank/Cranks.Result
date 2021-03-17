@@ -13,7 +13,7 @@ namespace Cranks.Result.Tests
 
             result.ShouldBeOfType<Passed>();
             result.Message.ShouldBeEmpty();
-            result.Reasons.ShouldBeEmpty();
+            result.Causes.ShouldBeEmpty();
         }
 
         [Fact]
@@ -23,8 +23,8 @@ namespace Cranks.Result.Tests
 
             result.ShouldBeOfType<Passed>();
             result.Message.ShouldBe("message");
-            result.Reasons.ShouldBeEmpty();
-            result.Reasons.ShouldBeEmpty();
+            result.Causes.ShouldBeEmpty();
+            result.Causes.ShouldBeEmpty();
         }
 
         [Fact]
@@ -35,11 +35,11 @@ namespace Cranks.Result.Tests
 
             result.ShouldBeOfType<Passed>();
             result.Message.ShouldBeEmpty();
-            result.Reasons.Count.ShouldBe(1);
+            result.Causes.Count.ShouldBe(1);
 
-            result.Reasons[0].ShouldBeOfType<Success>();
-            result.Reasons[0].Message.ShouldBe("success");
-            result.Reasons[0].Reasons.ShouldBeEmpty();
+            result.Causes[0].ShouldBeOfType<Success>();
+            result.Causes[0].Message.ShouldBe("success");
+            result.Causes[0].Causes.ShouldBeEmpty();
         }
 
         [Fact]
@@ -51,11 +51,11 @@ namespace Cranks.Result.Tests
 
             result.ShouldBeOfType<Passed>();
             result.Message.ShouldBe("message");
-            result.Reasons.Count.ShouldBe(1);
+            result.Causes.Count.ShouldBe(1);
 
-            result.Reasons[0].ShouldBeOfType<Success>();
-            result.Reasons[0].Message.ShouldBe("success");
-            result.Reasons[0].Reasons.ShouldBeEmpty();
+            result.Causes[0].ShouldBeOfType<Success>();
+            result.Causes[0].Message.ShouldBe("success");
+            result.Causes[0].Causes.ShouldBeEmpty();
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace Cranks.Result.Tests
             result.ShouldBeOfType<Passed<int>>();
             result.Value.ShouldBe(5);
             result.Message.ShouldBeEmpty();
-            result.Reasons.ShouldBeEmpty();
+            result.Causes.ShouldBeEmpty();
         }
 
         [Fact]
@@ -78,8 +78,8 @@ namespace Cranks.Result.Tests
             result.ShouldBeOfType<Passed<int>>();
             result.Value.ShouldBe(5);
             result.Message.ShouldBe("message");
-            result.Reasons.ShouldBeEmpty();
-            result.Reasons.ShouldBeEmpty();
+            result.Causes.ShouldBeEmpty();
+            result.Causes.ShouldBeEmpty();
         }
 
         [Fact]
@@ -91,11 +91,11 @@ namespace Cranks.Result.Tests
             result.ShouldBeOfType<Passed<int>>();
             result.Value.ShouldBe(5);
             result.Message.ShouldBeEmpty();
-            result.Reasons.Count.ShouldBe(1);
+            result.Causes.Count.ShouldBe(1);
 
-            result.Reasons[0].ShouldBeOfType<Success>();
-            result.Reasons[0].Message.ShouldBe("success");
-            result.Reasons[0].Reasons.ShouldBeEmpty();
+            result.Causes[0].ShouldBeOfType<Success>();
+            result.Causes[0].Message.ShouldBe("success");
+            result.Causes[0].Causes.ShouldBeEmpty();
         }
 
         [Fact]
@@ -108,11 +108,11 @@ namespace Cranks.Result.Tests
             result.ShouldBeOfType<Passed<int>>();
             result.Value.ShouldBe(5);
             result.Message.ShouldBe("message");
-            result.Reasons.Count.ShouldBe(1);
+            result.Causes.Count.ShouldBe(1);
 
-            result.Reasons[0].ShouldBeOfType<Success>();
-            result.Reasons[0].Message.ShouldBe("success");
-            result.Reasons[0].Reasons.ShouldBeEmpty();
+            result.Causes[0].ShouldBeOfType<Success>();
+            result.Causes[0].Message.ShouldBe("success");
+            result.Causes[0].Causes.ShouldBeEmpty();
         }
     }
 }

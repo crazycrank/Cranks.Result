@@ -16,6 +16,6 @@
         /// <summary>
         /// Gets the reasons underlying causes.
         /// </summary>
-        public ReasonCollection Reasons { get; }
+        public ReasonCollection Causes { get; }
     }
 }

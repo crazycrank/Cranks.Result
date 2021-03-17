@@ -13,7 +13,7 @@ namespace Cranks.Result.Tests
             var result2 = result.WithError("error");
 
             result2.ShouldBeOfType<Failed<string>>();
-            result2.Reasons.ShouldContain(new Error("error"));
+            result2.Causes.ShouldContain(new Error("error"));
         }
 
         [Fact]
@@ -23,7 +23,7 @@ namespace Cranks.Result.Tests
             var result2 = result.WithSuccess("success");
 
             result2.ShouldBeOfType<Passed<string>>();
-            result2.Reasons.ShouldContain(new Success("success"));
+            result2.Causes.ShouldContain(new Success("success"));
         }
 
         [Fact]

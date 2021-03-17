@@ -14,8 +14,8 @@
             Passed<IResult> { Value: not null and var genericResult } => genericResult,
             Failed => result switch
             {
-                Failed => new Failed(message, result.Reasons),
-                Passed => new Passed(message, result.Reasons),
+                Failed => new Failed(message, result.Causes),
+                Passed => new Passed(message, result.Causes),
             },
         };
 
@@ -29,8 +29,8 @@
         public static IResult<TValue> WithMessage<TValue>(this IResult<TValue> result, string message)
             => result switch
                {
-                   Failed => new Failed<TValue>(message, result.Reasons),
-                   Passed<TValue> passed => new Passed<TValue>(passed.Value, message, result.Reasons),
+                   Failed => new Failed<TValue>(message, result.Causes),
+                   Passed<TValue> passed => new Passed<TValue>(passed.Value, message, result.Causes),
                };
     }
 }

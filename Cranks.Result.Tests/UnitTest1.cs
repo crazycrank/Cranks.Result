@@ -14,7 +14,7 @@ namespace Cranks.Result.Tests
             var result = Result.Pass();
 
             result.ShouldBeOfType<Passed>();
-            result.Reasons.ShouldBeEmpty();
+            result.Causes.ShouldBeEmpty();
         }
 
         [Fact]
@@ -23,7 +23,7 @@ namespace Cranks.Result.Tests
             var result = Result.Pass("value");
 
             result.ShouldBeOfType<Passed<string>>();
-            result.Reasons.ShouldBeEmpty();
+            result.Causes.ShouldBeEmpty();
             result.Value.ShouldBe("value");
         }
 
@@ -34,7 +34,7 @@ namespace Cranks.Result.Tests
                                .WithError("error");
 
             result.ShouldBeOfType<Failed<string>>();
-            result.Reasons.ShouldContain(new Error("error"));
+            result.Causes.ShouldContain(new Error("error"));
             ShouldThrowExtensions.ShouldThrow<InvalidOperationException>(() => result.Value);
         }
 
@@ -48,20 +48,20 @@ namespace Cranks.Result.Tests
 
             var result = Result.Fail()
                                .WithMessage("root")
-                               .WithReason(innerResult);
+                               .WithCause(innerResult);
 
             result.ShouldBeOfType<Failed>();
             result.Message.ShouldBe("root");
-            result.Reasons.Count.ShouldBe(1);
+            result.Causes.Count.ShouldBe(1);
 
-            var rootError = result.Reasons[0];
+            var rootError = result.Causes[0];
             rootError.Message.ShouldBe("inner");
 
-            rootError.Reasons.Count.ShouldBe(2);
-            rootError.Reasons[0].Message.ShouldBe("message");
-            rootError.Reasons[0].Reasons.ShouldBeEmpty();
-            rootError.Reasons[1].Message.ShouldBe("message2");
-            rootError.Reasons[1].Reasons.ShouldBeEmpty();
+            rootError.Causes.Count.ShouldBe(2);
+            rootError.Causes[0].Message.ShouldBe("message");
+            rootError.Causes[0].Causes.ShouldBeEmpty();
+            rootError.Causes[1].Message.ShouldBe("message2");
+            rootError.Causes[1].Causes.ShouldBeEmpty();
         }
     }
 }
