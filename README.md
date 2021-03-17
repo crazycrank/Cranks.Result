@@ -1,7 +1,7 @@
 ﻿# Cranks.Result
 A simple, strongly typed and boilerplate poor implementation of the Result pattern.
 
-[![.NET](https://github.com/crazycrank/Cranks.Result/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/crazycrank/Cranks.Result/actions/workflows/dotnet.yml)
+[![Nuget](https://img.shields.io/nuget/v/Cranks.Result)](https://www.nuget.org/packages/Cranks.Result/) [![.NET](https://github.com/crazycrank/Cranks.Result/actions/workflows/dotnet.yml/badge.svg)](https://github.com/crazycrank/Cranks.Result/actions/workflows/dotnet.yml)
 
 ## Description
 
@@ -186,7 +186,7 @@ public IResult Method()
 
 ## Todos and possible enhancements
 - [ ] Analyzer which throws an error when trying to derive from IResult outside of the library
-- [ ] Improved Usage: WithMessageIfPassed, WithMessageIfFailed, Try, TryOrError, WithValueIf, WithMessageIf. Others?
+- [ ] Improved Usage: Try, TryOrError Others?
 - [ ] Idea to improve source generation to provide Result<TValue>.FactoryMethods. But it has downsides... Analyze more.
 - [ ] ASP.NET Core wrapper. Provide base error types and mapping rules for IActionResult so that results can be simply returned
 - [ ] Stringifier to modify how errors get converted to strings?

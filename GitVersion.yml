@@ -1,7 +1,7 @@
 ﻿next-version: 0.1
 branches:
   master:
-    increment: None
+    increment: Major
 
   develop:
     tag: 'alpha'
