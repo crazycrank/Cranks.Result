@@ -39,15 +39,10 @@ namespace Cranks.Result.Generator
 
         private static string GetHintName(ClassDeclarationSyntax classDeclaration)
         {
-            var compilationUnit = FindCompilationUnit(classDeclaration) as CompilationUnitSyntax;
+            var compilationUnit = classDeclaration.FindCompilationUnit() as CompilationUnitSyntax;
             var filePath = compilationUnit!.SyntaxTree.FilePath;
 
             return $"Result.{Path.GetFileNameWithoutExtension(filePath).Split('.').Last()}";
-
-            static SyntaxNode FindCompilationUnit(SyntaxNode node)
-            {
-                return node is CompilationUnitSyntax ? node : FindCompilationUnit(node.Parent!);
-            }
         }
     }
 }
