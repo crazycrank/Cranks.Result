@@ -56,14 +56,14 @@ jobs:
       with:
         path: |
           ~/.nuget/packages
-          ResultZ/obj/project.assets.json
-          ResultZ.AspNetCore/obj/project.assets.json
-          ResultZ.Generator/obj/project.assets.json
-          ResultZ.Tests/obj/project.assets.json
+          Cranks.Result/obj/project.assets.json
+          Cranks.Result.AspNetCore/obj/project.assets.json
+          Cranks.Result.Generator/obj/project.assets.json
+          Cranks.Result.Tests/obj/project.assets.json
         key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
         
     - name: Restore dependencies
-      if: steps.cache-dependencies.outputs.cache-hit != 'true'
+      #if: steps.cache-dependencies.outputs.cache-hit != 'true'
       run: dotnet restore
 
     - name: Build
@@ -74,11 +74,11 @@ jobs:
 
     - name: Pack
       if: contains(env.GitVersion_BranchName, 'master')
-      run: dotnet pack ResultZ/ResultZ.csproj --no-build --configuration Release --include-symbols --include-source -p:SymbolPackageFormat=snupkg --output nupkgs -p:VersionPrefix=${{ env.GitVersion_MajorMinorPatch }} 
+      run: dotnet pack Cranks.Result/Cranks.Result.csproj --no-build --configuration Release --include-symbols --include-source -p:SymbolPackageFormat=snupkg --output nupkgs -p:VersionPrefix=${{ env.GitVersion_MajorMinorPatch }} 
 
     - name: Nuget Publish
       if: contains(env.GitVersion_BranchName, 'master')
-      run: dotnet nuget push nupkgs/ResultZ.${{ env.GitVersion_MajorMinorPatch }}.nupkg --api-key ${{ secrets.NuGetAPIKey }} --source https://api.nuget.org/v3/index.json
+      run: dotnet nuget push nupkgs/Cranks.Result.${{ env.GitVersion_MajorMinorPatch }}.nupkg --api-key ${{ secrets.NuGetAPIKey }} --source https://api.nuget.org/v3/index.json
 
     - name: Tag commit with version
       if: contains(env.GitVersion_BranchName, 'master')

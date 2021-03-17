@@ -14,13 +14,14 @@
 
   <PropertyGroup>
     <Authors>Max Obrist</Authors>
-    <Product>ResultZ</Product>
+    <Product>Cranks.Result</Product>
     <Description>A simple, strongly typed and boilerplate poor implementation of the Result pattern.</Description>
     <Copyright>2021 Max Obrist</Copyright>
-    <PackageProjectUrl>https://github.com/crazycrank/ResultZ</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/crazycrank/ResultZ</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/crazycrank/Cranks.Result</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/crazycrank/Cranks.Result</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
+    <PackageTags>result results failure failed error exception handling success passed</PackageTags>
   </PropertyGroup>
 
 </Project>
