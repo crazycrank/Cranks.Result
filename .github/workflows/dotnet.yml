@@ -23,11 +23,10 @@ jobs:
         
     - name: Cache .NET
       uses: actions/cache@v2
-      # TODO better cache key?
       id: cache-dotnet
       with:
         path: ~/runner/.dotnet
-        key: ${{ runner.os }}-dotnet
+        key: ${{ runner.os }}-dotnet-${{ hashFiles('global.json') }}
         
     - name: Setup .NET
       if: steps.cache-dotnet.outputs.cache-hit != 'true'
