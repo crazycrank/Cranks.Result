@@ -1,6 +1,4 @@
-﻿using System;
-
-using Shouldly;
+﻿using Shouldly;
 
 using Xunit;
 
@@ -46,13 +44,16 @@ namespace Cranks.Result.Tests
             var innerResult = Result.WithMessage<int>("inner")
                                     .WithError("message1")
                                     .WithError("message2")
-                                    .WithSuccess(Result.Pass(42)new Success("success1", new Success("innerSuccess1"), new Success("innerSuccess2")));
+                                    .WithCause(Result.Pass(42)
+                                                     .WithSuccess(new Success("success",
+                                                                              new Success("innerSuccess1"),
+                                                                              new Success("innerSuccess2"))));
 
             var result = Result.WithMessage<int>("root")
                                .WithCause(innerResult)
                                .ToString();
 
-            result.ShouldBe("Failed { Message = root, Causes = ReasonCollection { _reasons = [ Failed { Message = inner, Causes = ReasonCollection { _reasons = [ Error { Message = message1 }, Error { Message = message2 } ] } } ] } }");
+            result.ShouldBe("Failed { Message = root, Causes = [ Failed { Message = inner, Causes = [ Error { Message = message1 }, Error { Message = message2 }, Passed { Message = , Causes = [ Success { Message = success, Causes = [ Success { Message = innerSuccess1 }, Success { Message = innerSuccess2 } ] } ], Value = 42 } ] } ] }");
         }
     }
 }

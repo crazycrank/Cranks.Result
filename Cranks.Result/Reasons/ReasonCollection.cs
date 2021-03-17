@@ -46,12 +46,18 @@ namespace Cranks.Result
 
         private bool PrintMembers(StringBuilder builder)
         {
-            builder.Append(nameof(_reasons));
-            builder.Append(" = [ ");
+            builder.Append("[ ");
             builder.Append(string.Join(", ", _reasons));
             builder.Append(" ]");
 
             return true;
+        }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+            PrintMembers(builder);
+            return builder.ToString();
         }
 
         public bool Equals(ReasonCollection? other)

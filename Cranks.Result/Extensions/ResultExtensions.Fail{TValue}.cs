@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Cranks.Result
+﻿namespace Cranks.Result
 {
     public static partial class ResultExtensions
     {
