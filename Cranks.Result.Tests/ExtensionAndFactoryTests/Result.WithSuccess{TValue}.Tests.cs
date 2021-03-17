@@ -36,5 +36,15 @@ namespace Cranks.Result.Tests.ExtensionAndFactoryTests
             result.Causes.ShouldHaveSingleItem();
             result.Causes.ShouldContain(new Success());
         }
+
+        [Fact]
+        public void WithSuccess_MultipleSuccesses_ResultHasSuccesses()
+        {
+            var result = Result.WithSuccess<int>(new Success("success1"), new Success("success2"));
+
+            result.ShouldBe(new Passed<int>(default,
+                                            new Success("success1"),
+                                            new Success("success2")));
+        }
     }
 }

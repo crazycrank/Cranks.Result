@@ -15,11 +15,6 @@ namespace Cranks.Result
     {
         private readonly ImmutableList<IReason> _reasons = ImmutableList<IReason>.Empty;
 
-        internal ReasonCollection(params IReason[] reasons)
-            : this(reasons.AsEnumerable())
-        {
-        }
-
         internal ReasonCollection(IEnumerable<IReason> reasons)
         {
             _reasons = reasons.ToImmutableList();

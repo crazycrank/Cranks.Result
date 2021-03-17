@@ -36,5 +36,14 @@ namespace Cranks.Result.Tests.ExtensionAndFactoryTests
             result.Causes.ShouldHaveSingleItem();
             result.Causes.ShouldContain(new Error());
         }
+
+        [Fact]
+        public void WithError_MultipleErrors_ResultHasErrors()
+        {
+            var result = Result.WithError<int>(new Error("error1"), new Error("error2"));
+
+            result.ShouldBe(new Failed<int>(new Error("error1"),
+                                            new Error("error2")));
+        }
     }
 }
