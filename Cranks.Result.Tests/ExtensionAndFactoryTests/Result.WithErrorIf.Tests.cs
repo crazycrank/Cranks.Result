@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using Cranks.Result.Tests.Utils;
+
+using Moq;
 
 using Shouldly;
 

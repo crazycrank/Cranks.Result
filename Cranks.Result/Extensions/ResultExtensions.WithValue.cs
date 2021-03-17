@@ -4,7 +4,7 @@
     {
         /// <summary>
         /// Creates a new <see cref="IResult{TValue}"/> with <see cref="IResult{TValue}.Value"/> set to <paramref name="value"/>.
-        /// If <see cref="IResult{TValue}"/> is of type <see cref="Failed{TValue}"/>, the value gets dropped.
+        /// If <paramref name="result"/> is of type <see cref="Failed"/>, the value gets dropped.
         /// </summary>
         /// <param name="result">The source <see cref="IResult"/> object the returned object is based on.</param>
         /// <param name="value">The new value of <see cref="IResult{TValue}"/>.</param>
