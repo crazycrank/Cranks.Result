@@ -21,7 +21,7 @@ namespace Cranks.Result.Tests
         [Fact]
         public void Fail_WithMessage_WithoutReasons()
         {
-            var result = Result.WithMessage("message");
+            var result = Result.Fail().WithMessage("message");
 
             result.ShouldBeOfType<Failed>();
             result.Message.ShouldBe("message");
